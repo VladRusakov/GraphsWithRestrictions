@@ -3,12 +3,12 @@ from typing import Dict, Set
 
 class CayleyTable:
 
-    def __init__(self, alphabet: Set[str], forbidden: str, rules: Dict[str, Dict[str, str]]):
-        self.alphabet = alphabet
+    def __init__(self, monoid: Set[str], forbidden: str, rules: Dict[str, Dict[str, str]]):
+        self.monoid = monoid
         self.forbidden = forbidden
         self.rules = rules
 
     def apply(self, a: str, b: str) -> str:
-        if not set(a, b).issubset(self.alphabet):
+        if not set(a, b).issubset(self.monoid):
             raise ValueError
         return self.rules[a][b]
