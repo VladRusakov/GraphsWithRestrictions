@@ -10,5 +10,5 @@ class CayleyTable:
 
     def apply(self, a: str, b: str) -> str:
         if not set(a, b).issubset(self.monoid):
-            raise ValueError
+            raise ValueError('Element is not included into monoid')
         return self.rules[a][b]
