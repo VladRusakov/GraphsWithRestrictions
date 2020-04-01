@@ -1,0 +1,13 @@
+from cayley_table import CayleyTable
+
+
+def generate_table(k: int) -> CayleyTable:
+    increase_symbol = 'a'
+    forbidden = 'z'
+    magnetic = 'm'
+    neutral = 'n'
+    monoid = set(forbidden, magnetic, neutral)
+    for level in range(k+1):
+        monoid.add(increase_symbol+str(level))
+    rules = {}
+    return CayleyTable(monoid, forbidden, rules)
