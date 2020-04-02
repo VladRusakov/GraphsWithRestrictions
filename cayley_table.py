@@ -3,7 +3,7 @@ from typing import Dict, Set
 
 class CayleyTable:
 
-    def __init__(self, monoid: Set[str], forbidden: str, rules: Dict[str, Dict[str, str]]):
+    def __init__(self, monoid: Set[str], rules: Dict[str, Dict[str, str]], forbidden: str = 'z'):
         self.monoid = monoid
         self.forbidden = forbidden
         self.rules = rules

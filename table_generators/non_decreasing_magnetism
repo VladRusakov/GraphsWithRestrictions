@@ -10,4 +10,4 @@ def generate_table(k: int) -> CayleyTable:
     for level in range(k+1):
         monoid.add(increase_symbol+str(level))
     rules = {}
-    return CayleyTable(monoid, forbidden, rules)
+    return CayleyTable(monoid, rules, forbidden)
