@@ -1,7 +1,16 @@
-from typing import Dict
+from typing import Dict, Any, Generator
+
+OUT_ARCS = 'out_arcs'
 
 
 class Graph:
+
+    class Arc:
+        def __init__(self, index: int, source: int, dest: int, info: Dict[str, Any] = {}):
+            self.index = index
+            self.source = source
+            self.dest = dest
+            self.info = info
 
     def __init__(self, nodes_count: int = 0):
         self._nodes = {}
@@ -9,13 +18,18 @@ class Graph:
         self._node_index = nodes_count
         self._arcs_count = 0
         for node in range(self._node_index):
-            self.nodes[node] = {'out_arcs': {}}
+            self.nodes[node] = {OUT_ARCS: []}
 
-    def get_arcs(self):
+    def __getitem__(self, node_index):
+        return self._nodes[node_index]
+
+    def __iter__(self):
+        return (node for node in self._nodes)
+
+    def get_arcs(self) -> Generator[Arc]:
         for node in self._nodes:
-            for dest in self._nodes[node]['out_arcs']:
-                for arc, info in self._nodes[node]['out_arcs'][dest].items():
-                    yield (node, dest, arc, info)
+            for arc in self._nodes[node][OUT_ARCS]:
+                yield arc
 
     @property
     def nodes_count(self):
@@ -26,13 +40,10 @@ class Graph:
         return self._arcs_count
 
     def add_node(self):
-        self.nodes[self._node_index] = {'out_arcs': {}}
+        self.nodes[self._node_index] = {OUT_ARCS: []}
         self._node_index += 1
 
     def add_arc(self, source: int, dest: int, info: Dict):
-        new_arc = {self._arc_index: info}
-        if self._nodes[source]['out_arcs'].get(dest) is not None:
-            self._nodes[source]['out_arcs'][dest].update(new_arc)
-        else:
-            self._nodes[source]['out_arcs'][dest] = new_arc
+        new_arc = self.Arc(self._arc_index, source, dest, info)
+        self._nodes[source][OUT_ARCS].append(new_arc)
         self._arc_index += 1

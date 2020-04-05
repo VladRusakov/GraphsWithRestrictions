@@ -1,0 +1,18 @@
+import unittest
+from table_generators.mixed_simple import generate_table_mixed_simple
+
+
+class TestCayleyTables(unittest.TestCase):
+
+    def test_mixed_simple_create(self):
+        table = generate_table_mixed_simple()
+        self.assertEqual(table.apply('a', 'b'), 'b')
+        self.assertEqual(table.apply('a', 'a'), 'a')
+        self.assertEqual(table.apply('b', 'a'), 'a')
+        self.assertEqual(table.apply('b', 'b'), 'z')
+        self.assertEqual(table.apply('b', 'e'), 'b')
+        self.assertEqual(table.apply('z', 'b'), 'z')
+
+
+if __name__ == '__main__':
+    unittest.main()

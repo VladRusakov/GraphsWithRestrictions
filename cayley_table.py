@@ -1,14 +1,17 @@
-from typing import Dict, Set
+from typing import Dict, List
 
 
 class CayleyTable:
 
-    def __init__(self, monoid: Set[str], rules: Dict[str, Dict[str, str]], forbidden: str = 'z'):
-        self.monoid = monoid
+    def __init__(self, elements: List[str], rules: Dict[str, Dict[str, str]], forbidden: str = 'z'):
+        self.elements = elements
         self.forbidden = forbidden
         self.rules = rules
 
     def apply(self, a: str, b: str) -> str:
-        if not set(a, b).issubset(self.monoid):
-            raise ValueError('Element is not included into monoid')
-        return self.rules[a][b]
+        if a not in self.elements:
+            raise ValueError(f"Element '{a}' is not included into elements set")
+        if b not in self.elements:
+            raise ValueError(f"Element '{b}' is not included into elements set")
+
+        return self.rules[a].get(b, self.forbidden)

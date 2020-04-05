@@ -6,8 +6,8 @@ def generate_table(k: int) -> CayleyTable:
     forbidden = 'z'
     magnetic = 'm'
     neutral = 'n'
-    monoid = set(forbidden, magnetic, neutral)
+    elements = set(forbidden, magnetic, neutral)
     for level in range(k+1):
-        monoid.add(increase_symbol+str(level))
+        elements.add(increase_symbol+str(level))
     rules = {}
-    return CayleyTable(monoid, rules, forbidden)
+    return CayleyTable(elements, rules, forbidden)
