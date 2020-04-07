@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1090</width>
+    <height>810</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1091</width>
+      <height>751</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayoutWindow">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMaximumSize</enum>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayoutGraphics"/>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QPushButton" name="pushButtonToLayered">
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>35</height>
+        </size>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Получить &amp;развёртку графа</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1090</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_open">
+    <property name="title">
+     <string>Открыть</string>
+    </property>
+    <addaction name="open_graph"/>
+    <addaction name="open_layeredgraph"/>
+   </widget>
+   <widget class="QMenu" name="menu_save">
+    <property name="title">
+     <string>Сохранить</string>
+    </property>
+    <addaction name="save_graph"/>
+    <addaction name="save_layered_graph"/>
+   </widget>
+   <widget class="QMenu" name="menu_tasks">
+    <property name="title">
+     <string>Задача</string>
+    </property>
+    <addaction name="task_dijkstra"/>
+    <addaction name="task_pascal"/>
+    <addaction name="task_random_walk"/>
+   </widget>
+   <addaction name="menu_open"/>
+   <addaction name="menu_save"/>
+   <addaction name="menu_tasks"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="open_graph">
+   <property name="text">
+    <string>Граф</string>
+   </property>
+  </action>
+  <action name="open_layeredgraph">
+   <property name="text">
+    <string>Граф-развёртка</string>
+   </property>
+  </action>
+  <action name="save_graph">
+   <property name="text">
+    <string>Граф</string>
+   </property>
+  </action>
+  <action name="save_layered_graph">
+   <property name="text">
+    <string>Граф-развёртку</string>
+   </property>
+  </action>
+  <action name="task_dijkstra">
+   <property name="text">
+    <string>Алгоритм Дейкстры</string>
+   </property>
+  </action>
+  <action name="task_pascal">
+   <property name="text">
+    <string>Алгоритм Паскаля</string>
+   </property>
+  </action>
+  <action name="task_random_walk">
+   <property name="text">
+    <string>Случайные блуждания</string>
+   </property>
+  </action>
+  <action name="action_12">
+   <property name="text">
+    <string>Потоковая задача</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,31 +1,28 @@
-from collections import Dict, Collection
+from typing import Dict, Collection
+from math import inf
+from graph import Graph, OUT_ARCS
 
-from graph import Graph
+
+def calculate_pascal(graph: Graph, sources: Collection[int], max_path_len: int = inf) -> Dict[int, int]:
+    paths_count = {node: 0 for node in graph}
+    to_update = {node_idx: 1 for node_idx in sources}
+    path_len = 0
+
+    while to_update and path_len <= max_path_len:
+        to_update = pascal_iteration(graph, to_update, paths_count)
+        path_len += 1
+
+    return paths_count
 
 
-def calculate_paths_count(graph: Graph, sources: Collection[int], max_path_len: int = None) -> Dict[int, int]:
+def pascal_iteration(graph: Graph, to_update: Dict[int, int], paths_count: Dict[int, int]) -> Dict[int, int]:
+    new_to_update = {}
 
-    class node_info:
-        def __init__(self, paths, addition):
-            self.paths = paths
-            self.addition = addition
-            self.new_addition
+    for node, addition in to_update.items():
+        paths_count[node] += addition
 
-    paths_count = {node: node_info(0, 0) for node in graph}
-    for node in sources:
-        paths_count[node].node_info.addition = 1
+    for node in to_update:
+        for arc in graph[node][OUT_ARCS]:
+            new_to_update[arc.dest] = new_to_update.get(arc.dest, 0) + paths_count[node]
 
-    R = len(sources)
-    R2 = 0
-
-    while R != R2:
-        for node in paths_count:
-            node.node_info.paths += node.node_info.addition
-            node.node_info.new_addition = 0
-
-        R2 = 0
-        for arc in graph.get_arcs():
-            paths_count[arc.dest].node_info.new_addition += paths_count[arc.source].addition
-            R2 += paths_count[arc.source].addition
-
-    return {}
+    return new_to_update

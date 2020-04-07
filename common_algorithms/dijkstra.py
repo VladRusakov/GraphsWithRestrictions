@@ -5,13 +5,13 @@ from heapq import heappush as insert, heappop as extract_minimum
 from graph import Graph, OUT_ARCS
 
 COST = 'cost'
-PREV = 'prev'
 VISITED = 'visited'
 WEIGHT = 'weight'
+ARC = 'arc'
 
 
 def calculate_dijkstra(graph: Graph, source: int) -> Dict[int, Dict[str, Any]]:
-    result = {node: {COST: inf, PREV: None, VISITED: False} for node in graph}
+    result = {node: {COST: inf, ARC: None, VISITED: False} for node in graph}
     result[source][COST] = 0
 
     to_visit = []
@@ -26,8 +26,8 @@ def calculate_dijkstra(graph: Graph, source: int) -> Dict[int, Dict[str, Any]]:
         for arc in graph[to_open][OUT_ARCS]:
             new_cost = result[to_open][COST] + arc.info[WEIGHT]
             if result[arc.dest][COST] > new_cost:
-                result[arc.dest][COST] = new_cost
-                result[arc.dest][PREV] = arc.index
+                result[arc.dest][COST] = new_costim
+                result[arc.dest][ARC] = arc.index
                 insert(to_visit, (new_cost, arc.index))
 
     return result
