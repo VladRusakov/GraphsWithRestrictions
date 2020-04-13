@@ -63,7 +63,7 @@
      <string>Открыть</string>
     </property>
     <addaction name="open_graph"/>
-    <addaction name="open_layeredgraph"/>
+    <addaction name="open_layered_graph"/>
    </widget>
    <widget class="QMenu" name="menu_save">
     <property name="title">
@@ -90,7 +90,7 @@
     <string>Граф</string>
    </property>
   </action>
-  <action name="open_layeredgraph">
+  <action name="open_layered_graph">
    <property name="text">
     <string>Граф-развёртка</string>
    </property>
