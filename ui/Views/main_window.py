@@ -5,6 +5,7 @@ from ui.Views.canvas import MplCanvas
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Toolbar
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -13,46 +14,46 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        # expanding area
-        self.area = QScrollArea(self.centralwidget)
-        self.area.setWidgetResizable(True)
 
         # vertical layout
-        self.verticalLayoutWidget = QtWidgets.QVBoxLayout()
-        self.centralwidget.setLayout(self.verticalLayoutWidget)
-        self.verticalLayoutWidget.addWidget(self.area)
+        self.verticalLayoutMain = QtWidgets.QVBoxLayout()
+        self.centralwidget.setLayout(self.verticalLayoutMain)
 
         # horizontal layout
         self.horizontalLayoutGraphics = QtWidgets.QHBoxLayout()
-        self.horizontalLayoutGraphics.setObjectName("horizontalLayoutGraphics")
-        self.verticalLayoutWidget.addLayout(self.horizontalLayoutGraphics)
+        self.verticalLayoutMain.addLayout(self.horizontalLayoutGraphics)
 
+        self.frameGraph = QtWidgets.QFrame()
+        self.frameGraph.setStyleSheet("background-color: red;")
+        self.horizontalLayoutGraphics.addWidget(self.frameGraph)
+        self.verticalLayoutGraph = QtWidgets.QVBoxLayout(self.frameGraph)
 
+        self.frameLayeredGraph = QtWidgets.QFrame()
+        self.frameLayeredGraph.setStyleSheet("background-color: blue;")
+        self.horizontalLayoutGraphics.addWidget(self.frameLayeredGraph)
+        self.verticalLayoutLayeredGraph = QtWidgets.QVBoxLayout(self.frameLayeredGraph)
 
         # canvases
         self.figure_graph = plt.figure(1)
         #nx.draw(G)
-        self.graphCanvas = MplCanvas(self.figure_graph)
-        self.graph_toolbar = Toolbar(self.graphCanvas, self.centralwidget)
+        self.graphCanvas = MplCanvas(self.figure_graph, self.frameGraph)
+        self.graph_toolbar = Toolbar(self.graphCanvas, self.frameGraph)
         #G2 = nx.cycle_graph(5)
         self.figure_layred_graph = plt.figure(2)
         #nx.draw(G2)
-        self.layeredGraphCanvas = MplCanvas(self.figure_layred_graph)
-        self.layered_graph_toolbar = Toolbar(self.layeredGraphCanvas, self.centralwidget)
-        self.horizontalLayoutGraphics.addWidget(self.graphCanvas)
-        self.horizontalLayoutGraphics.addWidget(self.layeredGraphCanvas)
-        self.verticalLayoutWidget.addWidget(self.graph_toolbar)
-        self.verticalLayoutWidget.addWidget(self.layered_graph_toolbar)
-
-        self.scrollAreaWidgetContents = self.layeredGraphCanvas
-        self.area.setWidget(self.scrollAreaWidgetContents)
+        self.verticalLayoutGraph.addWidget(self.graph_toolbar)
+        self.verticalLayoutGraph.addWidget(self.graphCanvas)
+        self.layeredGraphCanvas = MplCanvas(self.figure_layred_graph, self.frameLayeredGraph)
+        self.layered_graph_toolbar = Toolbar(self.layeredGraphCanvas, self.frameLayeredGraph)
+        self.verticalLayoutLayeredGraph.addWidget(self.layered_graph_toolbar)
+        self.verticalLayoutLayeredGraph.addWidget(self.layeredGraphCanvas)
 
         # push button
         self.pushButtonToLayered = QtWidgets.QPushButton()
         self.pushButtonToLayered.setMaximumSize(QtCore.QSize(200, 35))
         self.pushButtonToLayered.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.pushButtonToLayered.setObjectName("pushButtonToLayered")
-        self.verticalLayoutWidget.addWidget(self.pushButtonToLayered, 0, QtCore.Qt.AlignHCenter)
+        self.verticalLayoutMain.addWidget(self.pushButtonToLayered, 0, QtCore.Qt.AlignHCenter)
         MainWindow.setCentralWidget(self.centralwidget)
 
         # menus
@@ -96,7 +97,6 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_open.menuAction())
         self.menubar.addAction(self.menu_save.menuAction())
         self.menubar.addAction(self.menu_tasks.menuAction())
-
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
