@@ -1,6 +1,6 @@
 from typing import Dict, Collection
 from math import inf
-from graph_models.native.graph import Graph, OUT_ARCS
+from graph_models.networkx_based.graph import Graph
 
 
 def calculate_pascal(graph: Graph, sources: Collection[int], max_path_len: int = inf) -> Dict[int, int]:

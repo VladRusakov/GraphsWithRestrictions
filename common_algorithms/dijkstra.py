@@ -2,7 +2,7 @@ from typing import Dict, Any
 from math import inf
 from heapq import heappush as insert, heappop as extract_minimum
 
-from graph_models.native.graph import Graph, OUT_ARCS
+from graph_models.networkx_based.graph import Graph
 
 COST = 'cost'
 VISITED = 'visited'

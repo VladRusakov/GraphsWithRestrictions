@@ -26,7 +26,8 @@ class Graph:
     def __iter__(self):
         return (node for node in self._nodes)
 
-    def get_arcs(self) -> Generator[Arc]:
+    @property
+    def arcs(self) -> Generator[Arc]:
         for node in self._nodes:
             for arc in self._nodes[node][OUT_ARCS]:
                 yield arc
@@ -43,7 +44,7 @@ class Graph:
         self.nodes[self._node_index] = {OUT_ARCS: []}
         self._node_index += 1
 
-    def add_arc(self, source: int, dest: int, info: Dict):
+    def add_edge(self, source: int, dest: int, info: Dict):
         new_arc = self.Arc(self._arc_index, source, dest, info)
         self._nodes[source][OUT_ARCS].append(new_arc)
         self._arc_index += 1
