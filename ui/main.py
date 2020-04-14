@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from ui.Controllers.main_window_controller import MainWindowController
-from ui.Models.main_window_model import MainWindowModel
+from ui.controllers.main_window_controller import MainWindowController
+from ui.models.main_window_model import MainWindowModel
 
 
 def main():

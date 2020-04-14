@@ -1,6 +1,6 @@
-from cayley_table import CayleyTable
-from graph import Graph
-from layered_graph import LayeredGraph
+from graph_models.cayley_table import CayleyTable
+from graph_models.native.graph import Graph
+from graph_models.native.layered_graph import LayeredGraph
 
 
 def generate_layered_graph(graph: Graph, table: CayleyTable) -> LayeredGraph:

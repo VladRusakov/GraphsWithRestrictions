@@ -1,5 +1,5 @@
 from typing import Generator, Collection
-from graph import Graph
+from graph_models.native.graph import Graph
 
 
 class LayeredGraph(Graph):

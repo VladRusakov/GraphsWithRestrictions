@@ -1,4 +1,4 @@
-from cayley_table import CayleyTable
+from graph_models.cayley_table import CayleyTable
 
 
 def generate_table_mixed(max_in_row: int) -> CayleyTable:

@@ -1,9 +1,9 @@
 import networkx as nx
 
-from ui.Utils.observer import Observer
-from ui.Views.main_window import Ui_MainWindow
+from ui.utils.observer import Observer
+from ui.views.main_window import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
-from ui.Utils.window_metaclasses import WrapperAndAbcMeta
+from ui.utils.window_metaclasses import WrapperAndAbcMeta
 
 
 class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):

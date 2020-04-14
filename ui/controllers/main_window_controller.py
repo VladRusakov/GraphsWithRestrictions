@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMessageBox
 
-from ui.Views.main_window_view import MainWindowView
+from ui.views.main_window_view import MainWindowView
 
 
 class MainWindowController:
