@@ -1,5 +1,5 @@
 from typing import Generator, Collection
-from graph_models.native.graph import Graph, OUT_ARCS
+from graph_models.native.graph import Graph
 
 
 class LayeredGraph(Graph):
@@ -20,4 +20,3 @@ class LayeredGraph(Graph):
 
     def get_origin_path(self, path_on_layered: Collection[int]) -> Collection[int]:
         pass
-        #return (arc[] for )

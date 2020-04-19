@@ -1,18 +1,30 @@
 from typing import Collection, List
-from networkx import MultiDiGraph
-import networkx as nx
-nx.shortest_path()
+from networkx import Graph, MultiDiGraph
+
 
 class LayeredGraph(MultiDiGraph):
-    def __init__(self, graph: MultiDiGraph, layers: int):
+    def __init__(self, graph: Graph, layers: int = 1, origin_nodes: List[int] = []):
         super().__init__(graph)
-        self._layers = layers
-        self._origin_nodes = list(graph.nodes)
-        self._max_node = max(self.origin_nodes) + 1
+        if graph is LayeredGraph:
+            graph = LayeredGraph(graph)
+            self._layers = graph.layers
+            self._origin_nodes = graph.origin_nodes.copy()
+            self._max_node = graph.max_node
+        else:
+            if layers < 1:
+                raise ValueError(f'layers count should be a positive integer, but got {layers}')
+            self._layers = layers
+            self._origin_nodes = origin_nodes if origin_nodes else list(graph.nodes)
+            self._max_node = max(self.origin_nodes) + 1
+            self._generate_layers()
+
+    def _generate_layers(self):
+        for layer in range(1, self.layers):
+            self.add_nodes_from(node + layer * self.max_node for node in self.origin_nodes)
 
     @property
     def layers(self):
-        return self.layers
+        return self._layers
 
     @property
     def origin_nodes(self):
@@ -34,7 +46,7 @@ class LayeredGraph(MultiDiGraph):
 
     def get_layer_nodes(self, layer: int) -> Collection[int]:
         if type(layer) != 'int' or layer < 0 or layer >= self.layers:
-            raise ValueError('layer should be integer in range[0;layers)')
+            raise ValueError('Layer should be integer in range[0;layers)')
         layer_offset = layer * self.max_node
         for origin_node_index in self.origin_nodes:
             yield origin_node_index + layer_offset
@@ -54,4 +66,4 @@ if __name__ == "__main__":
     import networkx as nx
     g = nx.complete_graph(3)
     lg = LayeredGraph(g, 2)
-    print(lg.get_node_layer(12))
+    print(lg.nodes)
