@@ -1,5 +1,4 @@
 from graph_models.cayley_table import CayleyTable
-from graph_models.networkx_based.graph import Graph
 from graph_models.networkx_based.layered_graph import LayeredGraph
 
 

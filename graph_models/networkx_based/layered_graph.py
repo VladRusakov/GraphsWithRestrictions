@@ -1,4 +1,4 @@
-from typing import Collection, List
+from typing import Iterable, List
 from networkx import Graph, MultiDiGraph
 
 
@@ -58,7 +58,7 @@ class LayeredGraph(MultiDiGraph):
         for layer in range(self.layers):
             yield origin_node + layer * self.max_node
 
-    def get_origin_path(self, path_on_layered: Collection[int]) -> Collection[int]:
+    def get_origin_path(self, path_on_layered: Iterable[int]) -> Iterable[int]:
         pass
 
 
