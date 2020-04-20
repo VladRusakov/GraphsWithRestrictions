@@ -50,5 +50,6 @@ def parse_attrs(lines: List[str]) -> Dict[str, Any]:
         line = (line[:line.find(comments)]).strip()
         if line:
             field, data = line.split(':', maxsplit=1)
-            attrs[field] = eval(data)
+            from ast import literal_eval
+            attrs[field] = literal_eval(data)
     return attrs

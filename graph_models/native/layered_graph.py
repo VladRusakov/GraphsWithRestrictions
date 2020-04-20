@@ -1,4 +1,4 @@
-from typing import Generator, Collection
+from typing import Generator, Iterable
 from graph_models.native.graph import Graph
 
 
@@ -18,5 +18,5 @@ class LayeredGraph(Graph):
         for node_index in range(self.origin_nodes * layer, self.origin_nodes * (layer+1)):
             yield node_index
 
-    def get_origin_path(self, path_on_layered: Collection[int]) -> Collection[int]:
+    def get_origin_path(self, path_on_layered: Iterable[int]) -> Iterable[int]:
         pass

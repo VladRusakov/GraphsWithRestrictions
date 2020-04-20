@@ -44,7 +44,7 @@ class LayeredGraph(MultiDiGraph):
             raise ValueError('Node index should be integer and belong to graph')
         return node_index // self.max_node
 
-    def get_layer_nodes(self, layer: int) -> Collection[int]:
+    def get_layer_nodes(self, layer: int) -> Iterable[int]:
         if type(layer) != 'int' or layer < 0 or layer >= self.layers:
             raise ValueError('Layer should be integer in range[0;layers)')
         layer_offset = layer * self.max_node
