@@ -1,19 +1,19 @@
+from networkx import Graph
 from graph_models.cayley_table import CayleyTable
 from graph_models.networkx_based.layered_graph import LayeredGraph
 
 
 def generate_layered_graph(graph: Graph, table: CayleyTable) -> LayeredGraph:
+    layers = len(table.elements)-1
+    layered_graph = LayeredGraph(graph, layers)
 
-    layered_graph = LayeredGraph(len(table.elements)-1, graph.nodes_count)
-
-    for arc in graph.arcs:
-        arc_type = arc.info['type']
-        for level in range(table.elements):
+    for u, v, key in graph.edges(keys=True):
+        for level in range(layers):
+            arc_type = graph.get_edge_data(u, v, key)['arc_type']
             operation_result = table.apply(table.elements[level], arc_type)
             if operation_result is not table.forbidden:
-                source = arc.source + level * graph.nodes_count
-                dest = arc.dest + table.elements.find(operation_result) * graph.nodes_count
-                info = {'origin_index': arc.index}.update(arc.info)
-                layered_graph.add_edge(source, dest, info)
+                source = u + level * layered_graph.max_node
+                dest = v + table.elements.index(operation_result) * layered_graph.max_node
+                layered_graph.add_edge(source, dest, origin_edge=key)
 
     return layered_graph

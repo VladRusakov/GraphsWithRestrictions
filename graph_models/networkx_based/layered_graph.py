@@ -3,9 +3,9 @@ from networkx import Graph, MultiDiGraph
 
 
 class LayeredGraph(MultiDiGraph):
-    def __init__(self, graph: Graph, layers: int = 1, origin_nodes: List[int] = []):
-        super().__init__(graph)
+    def __init__(self, graph: Graph = None, layers: int = 1, origin_nodes: List[int] = []):
         if graph is LayeredGraph:
+            super().__init__(graph)
             graph = LayeredGraph(graph)
             self._layers = graph.layers
             self._origin_nodes = graph.origin_nodes.copy()
@@ -13,13 +13,14 @@ class LayeredGraph(MultiDiGraph):
         else:
             if layers < 1:
                 raise ValueError(f'layers count should be a positive integer, but got {layers}')
+            super().__init__()
             self._layers = layers
             self._origin_nodes = origin_nodes if origin_nodes else list(graph.nodes)
             self._max_node = max(self.origin_nodes) + 1
             self._generate_layers()
 
     def _generate_layers(self):
-        for layer in range(1, self.layers):
+        for layer in range(self.layers):
             self.add_nodes_from(node + layer * self.max_node for node in self.origin_nodes)
 
     @property
