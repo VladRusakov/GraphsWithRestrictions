@@ -33,15 +33,3 @@ class MainWindowModel:
     def notify_observers(self):
         for observer in self._observers:
             observer.model_is_changed()
-
-    def read_graph_from_file(self, path: str):
-        pass
-
-    def write_graph_to_file(self, path: str):
-        pass
-
-    def read_layered_from_file(self, path:str):
-        pass
-
-    def write_layered_to_file(self, path: str):
-        pass
