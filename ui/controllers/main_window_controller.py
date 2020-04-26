@@ -1,7 +1,6 @@
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QMessageBox
-
+from PyQt5.QtWidgets import QMessageBox, QFileDialog
 from ui.views.main_window_view import MainWindowView
+from graph_models.utils import read_graph, save_graph, read_layered_graph, save_layered_graph
 
 
 class MainWindowController:
@@ -15,7 +14,7 @@ class MainWindowController:
     #    self.model.x = double(x)
     # и так далее на все изменяемые во view элементы
 
-    def perform_graph(self) -> bool:
+    def obtain_graph(self) -> bool:
         graph = self.model.graph
         method = self.model.method
 
@@ -28,31 +27,53 @@ class MainWindowController:
         pass
 
     def open_graph(self):
-        import networkx as nx
-        #G = nx.dodecahedral_graph()
-        import matplotlib.pyplot as plt
-        #nx.draw(G)
-        #plt.draw()
-        #plt.
-        #plt.show()
-
-        H = nx.path_graph(4)
-        plt.figure(2)
-        nx.draw(H)
-
-        G = nx.cycle_graph(4)
-        plt.figure(1)
-        nx.draw(G)
-
-        plt.show()
-
-        print("OPEN GRAPH")
+        try:
+            filename = self.open_file_dialog()
+            if filename:
+                graph = read_graph(filename)
+                self.model.graph = graph
+                self.view.update()
+        except Exception:
+            QMessageBox.about(self.view, 'Ошибка', 'Выбранный файл имеет некорректное содержимое или поврежден')
 
     def open_layered_graph(self):
-        print("OPEN LAYERED GRAPH")
+        try:
+            filename = self.open_file_dialog()
+            if filename:
+                layered_graph = read_layered_graph(filename)
+                self.model.layered_graph = layered_graph
+                self.view.update()
+        except Exception:
+            QMessageBox.about(self.view, 'Ошибка', f'Выбранный файл имеет некорректное содержимое или поврежден')
 
     def save_graph(self):
-        print("Save GRAPH")
+        if not self.model.graph:
+            QMessageBox.about(self.view, 'Ошибка', f'Граф пуст. Нечего сохранять')
+            return
+        try:
+            filename = self.save_file_dialog()
+            if filename:
+                save_graph(self.model.layered_graph, filename)
+        except Exception:
+            QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл')
 
     def save_layered_graph(self):
-        print("save layered")
+        if not self.model.layered_graph:
+            QMessageBox.about(self.view, 'Ошибка', f'Граф-развёртка пуст. Нечего сохранять')
+            return
+        try:
+            filename = self.save_file_dialog()
+            if filename:
+                save_layered_graph(self.model.layered_graph, filename)
+        except Exception:
+            QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл')
+
+    def open_file_dialog(self):
+        options = QFileDialog.Options()
+        filename, _ = QFileDialog.getOpenFileName(self.view, "Открыть файл", options=options)
+        return filename
+
+    def save_file_dialog(self):
+        options = QFileDialog.Options()
+        filename, _ = QFileDialog.getSaveFileName(self.view, "Сохранить в файл", options=options)
+        return filename

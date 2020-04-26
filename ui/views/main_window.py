@@ -14,7 +14,6 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-
         # vertical layout
         self.verticalLayoutMain = QtWidgets.QVBoxLayout()
         self.centralwidget.setLayout(self.verticalLayoutMain)
@@ -34,16 +33,12 @@ class Ui_MainWindow(object):
         self.verticalLayoutLayeredGraph = QtWidgets.QVBoxLayout(self.frameLayeredGraph)
 
         # canvases
-        self.figure_graph = plt.figure(1)
-        #nx.draw(G)
-        self.graphCanvas = MplCanvas(self.figure_graph, self.frameGraph)
+        self.graphCanvas = MplCanvas(plt.figure('Graph'), self.frameGraph)
         self.graph_toolbar = Toolbar(self.graphCanvas, self.frameGraph)
-        #G2 = nx.cycle_graph(5)
-        self.figure_layred_graph = plt.figure(2)
-        #nx.draw(G2)
         self.verticalLayoutGraph.addWidget(self.graph_toolbar)
         self.verticalLayoutGraph.addWidget(self.graphCanvas)
-        self.layeredGraphCanvas = MplCanvas(self.figure_layred_graph, self.frameLayeredGraph)
+
+        self.layeredGraphCanvas = MplCanvas(plt.figure('Layered graph'), self.frameLayeredGraph)
         self.layered_graph_toolbar = Toolbar(self.layeredGraphCanvas, self.frameLayeredGraph)
         self.verticalLayoutLayeredGraph.addWidget(self.layered_graph_toolbar)
         self.verticalLayoutLayeredGraph.addWidget(self.layeredGraphCanvas)
