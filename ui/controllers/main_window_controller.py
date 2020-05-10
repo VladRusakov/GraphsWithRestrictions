@@ -12,15 +12,15 @@ class MainWindowController:
 
     def obtain_graph(self) -> bool:
         graph = self.model.graph
-        method = self.model.method
 
         if not graph:
             QMessageBox.about(self.view, "Ошибка", "Граф не загружен")
             return
-        if not method:
-            QMessageBox.about(self.view, "Ошибка", "Не выбран метод преобразования")
+        obtain_params = self.obtain_window()
+        if not obtain_params:
             return
-        pass
+        method = obtain_params['method']
+        self.model.layered_graph = method(obtain_params['args'])
 
     def open_graph(self):
         try:
@@ -63,3 +63,6 @@ class MainWindowController:
                 save_layered_graph(self.model.layered_graph, filename)
         except Exception:
             QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл')
+
+    def obtain_window(self):
+        pass
