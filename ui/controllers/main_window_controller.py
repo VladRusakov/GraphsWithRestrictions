@@ -28,7 +28,6 @@ class MainWindowController:
             if filename:
                 graph = read_graph(filename)
                 self.model.graph = graph
-                self.view.update()
         except Exception:
             QMessageBox.about(self.view, 'Ошибка', 'Выбранный файл имеет некорректное содержимое или поврежден')
 
@@ -38,7 +37,6 @@ class MainWindowController:
             if filename:
                 layered_graph = read_layered_graph(filename)
                 self.model.layered_graph = layered_graph
-                self.view.update()
         except Exception:
             QMessageBox.about(self.view, 'Ошибка', f'Выбранный файл имеет некорректное содержимое или поврежден')
 
@@ -63,6 +61,3 @@ class MainWindowController:
                 save_layered_graph(self.model.layered_graph, filename)
         except Exception:
             QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл')
-
-    def obtain_window(self):
-        pass

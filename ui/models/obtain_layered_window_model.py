@@ -1,13 +1,23 @@
+from ui.utils.model import AbstractModel
 
 
 class ObtainWindowModel(AbstractModel):
-    def __init__(self):
-        self.current_method = None
-        self.methods = {}
-        self._observers = []
 
-    @property.setter
+    methods_forms = {
+        ''
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.methods = {}
+        self.current_method = None
+
+    @property
+    def current_method(self):
+        return self._current_method
+
+    @current_method.setter
     def current_method(self, name):
-        if name in self.methods
-            self.current_method =
-        else pass?
+        if self.methods[name]:
+            self._current_method = name
+            self.notify_observers()

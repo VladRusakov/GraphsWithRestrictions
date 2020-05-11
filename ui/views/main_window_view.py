@@ -25,12 +25,9 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         self.ui.open_layered_graph.triggered.connect(self.controller.open_layered_graph)
         self.ui.save_graph.triggered.connect(self.controller.save_graph)
         self.ui.save_layered_graph.triggered.connect(self.controller.save_layered_graph)
-        self.update()
+        self.model_is_changed()
 
-    def model_is_changed(self):
-        self.update()
-
-    def update(self) -> None:
+    def model_is_changed(self) -> None:
 
         if self.model.graph:
             plt.figure('Graph', clear=True)  # также работает доступ через plt.figure(1)
