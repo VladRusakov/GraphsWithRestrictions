@@ -1,7 +1,7 @@
-from ui.utils.model import AbstractModel
+from ui.utils.model import Observable
 
 
-class ObtainWindowModel(AbstractModel):
+class ObtainWindowModel(Observable):
 
     methods_forms = {
         ''

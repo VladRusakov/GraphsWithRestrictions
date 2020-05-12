@@ -1,7 +1,7 @@
 from abc import ABC
 
 
-class AbstractModel(ABC):
+class Observable(ABC):
     def __init__(self):
         self._observers = []
 

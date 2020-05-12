@@ -1,7 +1,7 @@
-from ui.utils.model import AbstractModel
+from ui.utils.model import Observable
 
 
-class MainWindowModel(AbstractModel):
+class MainWindowModel(Observable):
     def __init__(self):
         super().__init__()
         self.graph = None
