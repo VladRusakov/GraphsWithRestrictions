@@ -12,6 +12,13 @@ class StateMachine:
         pass  # TODO Add rules verification
         self.rules = rules
 
+    def __str__(self):
+        rules_lines = str.join(",\n", [str(key) + " : " + str(value) for key, value in self.rules.items()])
+        return f'states : {self.states} \n' \
+            f'types : {self.types} \n' \
+            f'forbidden : {self.forbidden} \n' \
+            f'rules : {{\n{rules_lines}\n}}'
+
     def add_state(self, new_state: str):
         if new_state not in self.states and new_state != self.forbidden:
             self.states.append(new_state)
@@ -81,10 +88,15 @@ class StateMachine:
         self.types.clear()
         self.remove_all_rules()
 
-    def rename_forbidden(self, new_forbidden):
+    @property
+    def forbidden(self):
+        return self._forbidden
+
+    @forbidden.setter
+    def forbidden(self, new_forbidden):
         if new_forbidden in self.states:
             self.remove_state(new_forbidden)
-        self.forbidden = new_forbidden
+        self._forbidden = new_forbidden
 
     def apply(self, a: str, b: str) -> str:
         self.check_rule_args(a, b)

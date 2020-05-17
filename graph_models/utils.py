@@ -22,7 +22,7 @@ def read_graph(path: str, graph_type: type = MultiDiGraph):
         lines = [line.decode(encoding) for line in file]
         delimiter = lines.index(graph_section)
         attrs = parse_attrs(lines[:delimiter])
-        attrs.insert(0, None)
+        attrs.insert(0, None)  # adding empty graph
         return parse_multiline_adjlist(iter(lines[delimiter:]), comments,
                                        create_using=graph_type(*attrs), nodetype=int)
 
@@ -43,12 +43,12 @@ def write_to_file(graph: MultiDiGraph, file: BinaryIO) -> None:
         file.write((multiline + '\n').encode(encoding))
 
 
-def parse_attrs(lines: List[str]) -> Dict[str, Any]:
+def parse_attrs(lines: List[str]) -> List[Any]:
+    from ast import literal_eval
     attrs = []
     for line in lines:
         line = (line[:line.find(comments)]).strip()
         if line:
             field, data = line.split(':', maxsplit=1)
-            from ast import literal_eval
             attrs.append(literal_eval(data.strip()))
     return attrs
