@@ -4,7 +4,7 @@ from graph_models.state_machine import StateMachine
 from ui.utils.model import Observable
 
 
-class Model(Observable):
+class MachineWindowModel(Observable):
 
     def __init__(self):
         super(Observable, self).__init__()

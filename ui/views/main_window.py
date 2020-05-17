@@ -1,5 +1,4 @@
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QScrollArea
 
 from ui.views.canvas import MplCanvas
 import matplotlib.pyplot as plt
@@ -69,6 +68,8 @@ class Ui_MainWindow(object):
         self.open_graph.setObjectName("open_graph")
         self.open_layered_graph = QtWidgets.QAction(MainWindow)
         self.open_layered_graph.setObjectName("open_layered_graph")
+        self.open_machine = QtWidgets.QAction(MainWindow)
+        self.open_machine.setObjectName("open_machine")
         self.save_graph = QtWidgets.QAction(MainWindow)
         self.save_graph.setObjectName("save_graph")
         self.save_layered_graph = QtWidgets.QAction(MainWindow)
@@ -83,6 +84,7 @@ class Ui_MainWindow(object):
         self.task_max_flow.setObjectName("task_max_flow")
         self.menu_open.addAction(self.open_graph)
         self.menu_open.addAction(self.open_layered_graph)
+        self.menu_open.addAction(self.open_machine)
         self.menu_save.addAction(self.save_graph)
         self.menu_save.addAction(self.save_layered_graph)
         self.menu_tasks.addAction(self.task_dijkstra)
@@ -105,6 +107,7 @@ class Ui_MainWindow(object):
         self.menu_tasks.setTitle(_translate("MainWindow", "Задача"))
         self.open_graph.setText(_translate("MainWindow", "Граф"))
         self.open_layered_graph.setText(_translate("MainWindow", "Граф-развёртку"))
+        self.open_machine.setText(_translate("MainWindow", "Автомат"))
         self.save_graph.setText(_translate("MainWindow", "Граф"))
         self.save_layered_graph.setText(_translate("MainWindow", "Граф-развёртку"))
         self.task_dijkstra.setText(_translate("MainWindow", "Алгоритм Дейкстры"))

@@ -1,4 +1,7 @@
 from PyQt5.QtWidgets import QMessageBox
+
+from ui.controllers.machine_window_controller import MachineWindowController
+from ui.models.machine_window_model import MachineWindowModel
 from ui.views.main_window_view import MainWindowView
 from graph_models.utils import read_graph, save_graph, read_layered_graph, save_layered_graph
 from ui.utils.readwrite_dialogs import open_file_dialog, save_file_dialog
@@ -39,6 +42,13 @@ class MainWindowController:
                 self.model.layered_graph = layered_graph
         except Exception:
             QMessageBox.about(self.view, 'Ошибка', f'Выбранный файл имеет некорректное содержимое или поврежден')
+
+    def open_machine(self):
+        try:
+            machine_model = MachineWindowModel()
+            machine_controller = MachineWindowController(machine_model)
+        except Exception as e:
+            print(e)
 
     def save_graph(self):
         if not self.model.graph:

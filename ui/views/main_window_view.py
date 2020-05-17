@@ -23,6 +23,7 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         self.ui.pushButtonToLayered.clicked.connect(self.controller.obtain_graph)
         self.ui.open_graph.triggered.connect(self.controller.open_graph)
         self.ui.open_layered_graph.triggered.connect(self.controller.open_layered_graph)
+        self.ui.open_machine.triggered.connect(self.controller.open_machine)
         self.ui.save_graph.triggered.connect(self.controller.save_graph)
         self.ui.save_layered_graph.triggered.connect(self.controller.save_layered_graph)
         self.model_is_changed()
