@@ -7,7 +7,7 @@ from ui.utils.model import Observable
 class MachineWindowModel(Observable):
 
     def __init__(self):
-        super(Observable, self).__init__()
+        super().__init__()
         self.machine = StateMachine([], [], {})
 
     def change_rule(self, state: str, arc_type: str, result: str):

@@ -43,10 +43,10 @@ class MainWindowController:
         except Exception:
             QMessageBox.about(self.view, 'Ошибка', f'Выбранный файл имеет некорректное содержимое или поврежден')
 
-    def open_machine(self):
+    @staticmethod
+    def open_machine_window():
         try:
-            machine_model = MachineWindowModel()
-            machine_controller = MachineWindowController(machine_model)
+            MachineWindowController(MachineWindowModel())
         except Exception as e:
             print(e)
 
@@ -58,8 +58,8 @@ class MainWindowController:
             filename = save_file_dialog(self.view)
             if filename:
                 save_graph(self.model.layered_graph, filename)
-        except Exception:
-            QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл')
+        except Exception as e:
+            QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл ({e})')
 
     def save_layered_graph(self):
         if not self.model.layered_graph:
@@ -69,5 +69,5 @@ class MainWindowController:
             filename = save_file_dialog(self.view)
             if filename:
                 save_layered_graph(self.model.layered_graph, filename)
-        except Exception:
-            QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл')
+        except Exception as e:
+            QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл  ({e})')

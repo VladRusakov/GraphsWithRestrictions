@@ -1,36 +1,84 @@
+from typing import List
+
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QMessageBox
+
+from ui.models.machine_window_model import MachineWindowModel
 from ui.views.machine_window_view import MachineWindowView
+from ui.utils.readwrite_dialogs import save_file_dialog, open_file_dialog
 
 
 class MachineWindowController:
 
-    def __init__(self, model):
+    def __init__(self, model: MachineWindowModel):
         self.model = model
         self.view = MachineWindowView(self, self.model)  # TODO derive parent window to MachineWindowController as param
         self.view.show()
 
     def load_machine(self):
-        pass
+        try:
+            filename = open_file_dialog(self.view)
+            if filename:
+                self.model.read_machine(filename)
+        except Exception as e:
+            QMessageBox.about(self.view, 'Ошибка', f'Выбранный файл имеет некорректное содержимое или поврежден ({e})')
 
     def save_machine(self):
-        pass
+        try:
+            filename = save_file_dialog(self.view)
+            if filename:
+                self.model.save_machine(filename)
+        except Exception as e:
+            QMessageBox.about(self.view, 'Ошибка', f'Не удалось сохранить файл. ({e})')
 
     def clear(self):
-        pass
+        self.model.clear_machine()
 
     def apply_states(self):
-        pass
+        new_states = get_list_srtings(self.view.statesInput.toPlainText())
+        self.model.update_states(new_states)
 
     def apply_types(self):
-        pass
+        new_types = get_list_srtings(self.view.typesInput.toPlainText())
+        self.model.update_types(new_types)
 
     def set_forbidden(self):
-        pass
+        new_forbidden = self.view.forbiddenInput.toPlainText().strip()
+        if new_forbidden:
+            self.model.update_forbidden(new_forbidden)
+        else:
+            QMessageBox.about(self.view, "Ошибка", "Имя нового запретного состояния пусто")
 
     def rename_state(self):
-        pass
+        old_state = self.view.oldStateInput.toPlainText().strip()
+        if old_state not in self.model.machine.states:
+            QMessageBox.about(self.view, "Ошибка", "Заменяемое состояние отсутствует")
+            return
+        new_state = self.view.newStateInput.toPlainText().strip()
+        if new_state:
+            self.model.machine.rename_state(old_state, new_state)
 
     def rename_type(self):
-        pass
+        old_type = self.view.oldTypeInput.toPlainText().strip()
+        if old_type not in self.model.machine.types:
+            QMessageBox.about(self.view, "Ошибка", "Заменяемый тип дуг отсутствует")
+            return
+        new_type = self.view.newTypeInput.toPlainText().strip()
+        if new_type:
+            self.model.machine.rename_type(old_type, new_type)
 
     def set_rule(self):
-        pass
+        state = self.view.stateInput.toPlainText().strip()
+        arc_type = self.view.typeInput.toPlainText().strip()
+        result = self.view.resultInput.toPlainText().strip()
+        machine = self.model.machine
+        if ((result in machine.states or result == machine.forbidden) and
+                state in machine.states and arc_type in machine.types):
+            machine.set_rule(state, arc_type, result)
+        else:
+            QMessageBox.about(self.view, "Ошибка", "Неверно заданы: состояние, тип дуг или результат")
+
+
+def get_list_srtings(string: str) -> List[str]:
+    import re
+    return list((re.sub('[\{\}\[\]:]', '', string.replace(' ', '')).split(',')))

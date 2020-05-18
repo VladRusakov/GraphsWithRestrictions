@@ -1,8 +1,6 @@
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtCore import pyqtSlot, QSize
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QSizePolicy
 
-from ui.controllers.machine_window_controller import MachineWindowController
 from ui.models.machine_window_model import MachineWindowModel
 from ui.utils.observer import Observer
 from ui.utils.window_metaclasses import WrapperAndAbcMeta
@@ -10,7 +8,7 @@ from ui.utils.window_metaclasses import WrapperAndAbcMeta
 
 class MachineWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
 
-    def __init__(self, controller: MachineWindowController, model: MachineWindowModel, parent=None):
+    def __init__(self, controller, model: MachineWindowModel, parent=None):
         super(QMainWindow, self).__init__(parent)
         self.controller = controller
         self.model = model
@@ -29,9 +27,12 @@ class MachineWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         self.setCentralWidget(self.centralWidget)
 
         self.menubar = self.menuBar()
-        self.open_machine = self.menubar.addMenu('Открыть')
-        self.save_machine = self.menubar.addMenu('Сохранить')
-        self.clear_machine = self.menubar.addMenu('Очистить')
+        self.open_machine = QtWidgets.QAction('Открыть')
+        self.menubar.addAction(self.open_machine)
+        self.save_machine = QtWidgets.QAction('Сохранить')
+        self.menubar.addAction(self.save_machine)
+        self.clear_machine = QtWidgets.QAction('Очистить')
+        self.menubar.addAction(self.clear_machine)
 
         self.horizontalLayoutMain = QtWidgets.QHBoxLayout()
         self.centralWidget.setLayout(self.horizontalLayoutMain)
