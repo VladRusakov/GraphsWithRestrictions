@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import pyqtSlot, QSize
 from PyQt5.QtWidgets import QMainWindow, QSizePolicy
 
+from ui.controllers.machine_window_controller import MachineWindowController
 from ui.models.machine_window_model import MachineWindowModel
 from ui.utils.observer import Observer
 from ui.utils.window_metaclasses import WrapperAndAbcMeta
@@ -9,7 +10,7 @@ from ui.utils.window_metaclasses import WrapperAndAbcMeta
 
 class MachineWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
 
-    def __init__(self, controller, model: MachineWindowModel, parent=None):
+    def __init__(self, controller: MachineWindowController, model: MachineWindowModel, parent=None):
         super(QMainWindow, self).__init__(parent)
         self.controller = controller
         self.model = model
@@ -110,16 +111,16 @@ class MachineWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         horizontalLayoutSetRule.addWidget(self.setRuleButton)
 
     def register_events(self):
-        self.open_machine.triggered.connect(self.controller)
-        self.save_machine.triggered.connect(self.controller)
-        self.clear_machine.triggered.connect(self.controller)
+        self.open_machine.triggered.connect(self.controller.load_machine)
+        self.save_machine.triggered.connect(self.controller.save_machine)
+        self.clear_machine.triggered.connect(self.controller.clear)
 
-        self.statesButton.clicked.connect(self.controller)
-        self.typesButton.clicked.connect(self.controller)
-        self.forbiddenButton.clicked.connect(self.controller)
-        self.renameStateButton.clicked.connect(self.controller)
-        self.renameTypeButton.clicked.connect(self.controller)
-        self.setRuleButton.clicked.connect(self.controller)
+        self.statesButton.clicked.connect(self.controller.apply_states)
+        self.typesButton.clicked.connect(self.controller.apply_types)
+        self.forbiddenButton.clicked.connect(self.controller.set_forbidden)
+        self.renameStateButton.clicked.connect(self.controller.rename_state)
+        self.renameTypeButton.clicked.connect(self.controller.rename_type)
+        self.setRuleButton.clicked.connect(self.controller.set_rule)
 
     def model_is_changed(self):
         self.tableWidget.resizeColumnsToContents()
