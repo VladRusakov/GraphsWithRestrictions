@@ -11,7 +11,6 @@ class MachineWindowController:
     def __init__(self, model: MachineWindowModel):
         self.model = model
         self.view = MachineWindowView(self, self.model)  # TODO derive parent window to MachineWindowController as param
-        self.view.show()
 
     def load_machine(self):
         try:

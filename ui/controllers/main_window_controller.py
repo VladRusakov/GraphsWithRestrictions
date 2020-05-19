@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMessageBox
 
 from ui.controllers.machine_window_controller import MachineWindowController
+from ui.controllers.obtain_layered_window_controller import ObtainWindowController
 from ui.models.machine_window_model import MachineWindowModel
 from ui.views.main_window_view import MainWindowView
 from graph_models.utils import read_graph, save_graph, read_layered_graph, save_layered_graph
@@ -15,14 +16,29 @@ class MainWindowController:
 
     def obtain_graph(self) -> bool:
         graph = self.model.graph
-        if not graph:
-            QMessageBox.about(self.view, "Ошибка", "Граф не загружен")
-            return
-        obtain_params = self.obtain_window()
-        if not obtain_params:
-            return
-        method = obtain_params['method']
-        self.model.layered_graph = method(obtain_params['args'])
+        # if not graph:
+        #     QMessageBox.about(self.view, "Ошибка", "Граф не загружен")
+        #     return
+
+        try:
+            from ui.views.get_data_widgets import LabelAndTextEdit, MachineGetter
+            variants = {
+                'One': [(LabelAndTextEdit, {'label_text': 'label1', 'result_key': '', 'result_type': str}),
+                        (LabelAndTextEdit, {'label_text': 'label2', 'result_key': '', 'result_type': str})],
+                'Two': [(LabelAndTextEdit, {'label_text': 'label33', 'result_key': '', 'result_type': str}),
+                        (MachineGetter, {'result_key': ''})]
+            }
+
+            ObtainWindowController(variants)
+
+        except Exception as e:
+            print(str(e))
+
+        # obtain_params = self.obtain_window()
+        # if not obtain_params:
+        #     return
+        # method = obtain_params['method']
+        # self.model.layered_graph = method(obtain_params['args'])
 
     def open_graph(self):
         try:
@@ -44,10 +60,7 @@ class MainWindowController:
 
     @staticmethod
     def open_machine_window():
-        try:
-            MachineWindowController(MachineWindowModel())
-        except Exception as e:
-            print(e)
+        MachineWindowController(MachineWindowModel())
 
     def save_graph(self):
         if not self.model.graph:

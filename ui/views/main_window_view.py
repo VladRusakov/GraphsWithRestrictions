@@ -31,7 +31,6 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
     def set_answer_text(self, text):
         self.ui.answerTextEdit.setPlainText(text)
 
-
     def model_is_changed(self) -> None:
 
         if self.model.graph:

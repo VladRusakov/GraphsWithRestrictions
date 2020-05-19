@@ -13,6 +13,7 @@ class Ui_MainWindow(object):
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        MainWindow.setCentralWidget(self.centralwidget)
 
         # vertical layout
         self.verticalLayoutMain = QtWidgets.QVBoxLayout()
@@ -49,7 +50,6 @@ class Ui_MainWindow(object):
         self.pushButtonToLayered.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.pushButtonToLayered.setObjectName("pushButtonToLayered")
         self.verticalLayoutMain.addWidget(self.pushButtonToLayered, 0, QtCore.Qt.AlignHCenter)
-        MainWindow.setCentralWidget(self.centralwidget)
 
         self.answerTextEdit = QtWidgets.QTextEdit()
         self.answerTextEdit.setMaximumHeight(100)
