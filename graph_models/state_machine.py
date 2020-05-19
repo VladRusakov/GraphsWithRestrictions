@@ -1,22 +1,29 @@
-from typing import List, Dict
+from typing import List, Dict, Any
+
+
+def delete_duplicates(seq: List[Any]) -> List[Any]:
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
 
 
 class StateMachine:
 
     def __init__(self, states: List[str], types: List[str], rules: Dict[str, Dict[str, str]], forbidden: str = 'z'):
-        self.states = list(set(states))
+
+        self.states = delete_duplicates(states)
         self.forbidden = forbidden
         if self.forbidden in self.states:
             self.states.remove(forbidden)
-        self.types = list(set(types))
+        self.types = delete_duplicates(types)
         pass  # TODO Add rules verification
         self.rules = rules
 
     def __str__(self):
-        rules_lines = str.join(",\n", [str(key) + " : " + str(value) for key, value in self.rules.items()])
+        rules_lines = str.join(",\n", [f'"{str(key)}"' + " : " + str(value) for key, value in self.rules.items()])
         return f'states : {self.states} \n' \
             f'types : {self.types} \n' \
-            f'forbidden : {self.forbidden} \n' \
+            f'forbidden : "{self.forbidden}" \n' \
             f'rules : {{\n{rules_lines}\n}}'
 
     def add_state(self, new_state: str):
@@ -62,14 +69,16 @@ class StateMachine:
     def rename_type(self, old_type: str, new_type: str):
         if old_type in self.types:
             if new_type in self.types:
-                self.remove_type(new_type)
-            self.types.append(new_type)
-            for state in self.states:
-                try:
-                    rule_result = self.rules[state].pop(old_type)
-                    self.rules[state][new_type] = rule_result
-                except KeyError:
-                    pass
+                self.remove_type(old_type)
+            else:
+                type_index = self.types.index(old_type)
+                self.types[type_index] = new_type
+                for state in self.states:
+                    try:
+                        rule_result = self.rules[state].pop(old_type)
+                        self.rules[state][new_type] = rule_result
+                    except KeyError:
+                        pass
         else:
             raise ValueError(f"'{old_type}' not in types")
 
@@ -123,7 +132,7 @@ class StateMachine:
         self.rules.clear()
 
     def check_rule_args(self, a: str, b: str):
-        if a not in self.states or a != self.forbidden:
+        if a not in self.states and a != self.forbidden:
             raise ValueError(f"Element '{a}' is not included into states set (.states) or forbidden")
         if b not in self.types:
             raise ValueError(f"Element '{b}' is not included into types set (.types)")

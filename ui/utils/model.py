@@ -15,3 +15,10 @@ class Observable(ABC):
     def notify_observers(self):
         for observer in self._observers:
             observer.model_is_changed()
+
+
+def update_observers(function):
+    def wrapper(self, *args, **kwargs):
+        function(self, *args, **kwargs)
+        self.notify_observers()
+    return wrapper

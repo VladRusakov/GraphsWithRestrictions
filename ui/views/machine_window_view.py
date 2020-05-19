@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QSizePolicy
+from PyQt5.QtWidgets import QMainWindow, QSizePolicy, QTableWidgetItem
 
 from ui.models.machine_window_model import MachineWindowModel
 from ui.utils.observer import Observer
@@ -15,6 +15,7 @@ class MachineWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         self.model.add_observer(self)
         self.setupUi()
         self.register_events()
+        self.model_is_changed()
         self.show()
 
     def setupUi(self):
@@ -123,12 +124,36 @@ class MachineWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         self.renameTypeButton.clicked.connect(self.controller.rename_type)
         self.setRuleButton.clicked.connect(self.controller.set_rule)
 
-    def model_is_changed(self):
-        self.tableWidget.resizeColumnsToContents()
+        self.tableWidget.cellChanged.connect(self.controller.cell_changed)
+
+    def set_table_data(self):
         machine = self.model.machine
-        self.statesInput.setText(str.join(',', machine.states))
-        self.typesInput.setText(str.join(',', machine.types))
-        self.forbiddenInput.setText(machine.forbidden)
-        self.tableWidget.setVerticalHeaderLabels(machine.states)
-        self.tableWidget.setHorizontalHeaderLabels(machine.types)
-        self.update()
+        self.tableWidget.cellChanged.disconnect(self.controller.cell_changed)
+        for state, rules in machine.rules.items():
+            if rules:
+                for arc_type, result in rules.items():
+                    if result:
+                        row = machine.states.index(state)
+                        column = machine.types.index(arc_type)
+                        self.tableWidget.setItem(row, column, QTableWidgetItem(result))
+        self.tableWidget.cellChanged.connect(self.controller.cell_changed)
+
+    def model_is_changed(self):
+        #if True:
+        try:
+            machine = self.model.machine
+            self.statesInput.setText(str.join(',', machine.states))
+            self.typesInput.setText(str.join(',', machine.types))
+            self.forbiddenInput.setText(machine.forbidden)
+
+            self.tableWidget.setRowCount(len(machine.states))
+            self.tableWidget.setColumnCount(len(machine.types))
+            self.tableWidget.setVerticalHeaderLabels(machine.states)
+            self.tableWidget.setHorizontalHeaderLabels(machine.types)
+
+            self.set_table_data()
+            self.tableWidget.resizeColumnsToContents()
+            self.tableWidget.viewport().update()
+            self.update()
+        except Exception as e:
+            print(e)
