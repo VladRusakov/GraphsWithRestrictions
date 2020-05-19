@@ -6,6 +6,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Toolbar
 
 
 class Ui_MainWindow(object):
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -44,11 +45,15 @@ class Ui_MainWindow(object):
 
         # push button
         self.pushButtonToLayered = QtWidgets.QPushButton()
-        self.pushButtonToLayered.setMaximumSize(QtCore.QSize(200, 35))
+        self.pushButtonToLayered.adjustSize()
         self.pushButtonToLayered.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.pushButtonToLayered.setObjectName("pushButtonToLayered")
         self.verticalLayoutMain.addWidget(self.pushButtonToLayered, 0, QtCore.Qt.AlignHCenter)
         MainWindow.setCentralWidget(self.centralwidget)
+
+        self.answerTextEdit = QtWidgets.QTextEdit()
+        self.answerTextEdit.setMaximumHeight(100)
+        self.verticalLayoutMain.addWidget(self.answerTextEdit)
 
         # menus
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -101,7 +106,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Графы с нестандартной достижимостью"))
-        self.pushButtonToLayered.setText(_translate("MainWindow", "Получить &развёртку графа"))
+        self.pushButtonToLayered.setText(_translate("MainWindow", "Получить развёртку графа"))
         self.menu_open.setTitle(_translate("MainWindow", "Открыть"))
         self.menu_save.setTitle(_translate("MainWindow", "Сохранить"))
         self.menu_tasks.setTitle(_translate("MainWindow", "Задача"))

@@ -1,4 +1,4 @@
-from ui.utils.model import Observable
+from ui.utils.model import Observable, update_observers
 
 
 class MainWindowModel(Observable):
@@ -13,15 +13,16 @@ class MainWindowModel(Observable):
         return self._graph
 
     @graph.setter
+    @update_observers
     def graph(self, graph):
         self._graph = graph
-        self.notify_observers()
 
     @property
     def layered_graph(self):
         return self._layered_graph
 
     @layered_graph.setter
+    @update_observers
     def layered_graph(self, layered_graph):
         self._layered_graph = layered_graph
         self.notify_observers()

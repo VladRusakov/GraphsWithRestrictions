@@ -15,7 +15,6 @@ class MainWindowController:
 
     def obtain_graph(self) -> bool:
         graph = self.model.graph
-
         if not graph:
             QMessageBox.about(self.view, "Ошибка", "Граф не загружен")
             return
@@ -31,8 +30,8 @@ class MainWindowController:
             if filename:
                 graph = read_graph(filename)
                 self.model.graph = graph
-        except Exception:
-            QMessageBox.about(self.view, 'Ошибка', 'Выбранный файл имеет некорректное содержимое или поврежден')
+        except Exception as e:
+            QMessageBox.about(self.view, 'Ошибка', f'Выбранный файл имеет некорректное содержимое или поврежден({e})')
 
     def open_layered_graph(self):
         try:
@@ -40,8 +39,8 @@ class MainWindowController:
             if filename:
                 layered_graph = read_layered_graph(filename)
                 self.model.layered_graph = layered_graph
-        except Exception:
-            QMessageBox.about(self.view, 'Ошибка', f'Выбранный файл имеет некорректное содержимое или поврежден')
+        except Exception as e:
+            QMessageBox.about(self.view, 'Ошибка', f'Выбранный файл имеет некорректное содержимое или поврежден({e})')
 
     @staticmethod
     def open_machine_window():

@@ -28,6 +28,10 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         self.ui.save_layered_graph.triggered.connect(self.controller.save_layered_graph)
         self.model_is_changed()
 
+    def set_answer_text(self, text):
+        self.ui.answerTextEdit.setPlainText(text)
+
+
     def model_is_changed(self) -> None:
 
         if self.model.graph:
