@@ -1,21 +1,30 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Callable
 from PyQt5.QtWidgets import QWidget, QMessageBox
+
+from ui.views.get_data_widgets import DataGetter
 from ui.views.obtain_layered_view import ObtainWindowView
 
 
 class ObtainWindowController:
-    def __init__(self, variants: Dict[str, List[Any]]):
+    def __init__(self, variants: Dict[str, List[Any]], obtain_callback: Callable = None):
         self.variants = variants
-        self.current_variant = None
+        self.current_data_getters: List[DataGetter] = None
         self.view = ObtainWindowView(self, list(self.variants.keys()))
+        self.obtain_callback = obtain_callback
 
     def set_variant_widgets(self, variant: str, parent: QWidget):
+        self.current_data_getters = []
         for data_getter in self.variants[variant]:
-            data_getter[0](parent=parent, **data_getter[1])
+            self.current_data_getters.append(data_getter[0](parent=parent, **data_getter[1]))
 
-    def get_obtain_params(self):
+    def gather_data_from_getters(self):
+        params = {}
         try:
-            pass
-        # считать и вернуть словарь с параметрами преобразования
-        except Exception as e:
-            QMessageBox.about("Ошибка", str(e))
+            for data_getter in self.current_data_getters:
+                key, value = data_getter.get_data()
+                params[key] = value
+        except Exception as e:  # TODO specify exception
+            QMessageBox.about(self, "Ошибка", e)
+        else:
+            self.obtain_callback(**params)
+            self.view.close()

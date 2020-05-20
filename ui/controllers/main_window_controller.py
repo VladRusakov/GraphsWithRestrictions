@@ -23,13 +23,16 @@ class MainWindowController:
         try:
             from ui.views.get_data_widgets import LabelAndTextEdit, MachineGetter
             variants = {
-                'One': [(LabelAndTextEdit, {'label_text': 'label1', 'result_key': '', 'result_type': str}),
-                        (LabelAndTextEdit, {'label_text': 'label2', 'result_key': '', 'result_type': str})],
-                'Two': [(LabelAndTextEdit, {'label_text': 'label33', 'result_key': '', 'result_type': str}),
-                        (MachineGetter, {'result_key': ''})]
+                'One': [(LabelAndTextEdit, {'label_text': 'label1', 'result_key': '1', 'result_type': str}),
+                        (LabelAndTextEdit, {'label_text': 'label2', 'result_key': '2', 'result_type': str})],
+                'Two': [(LabelAndTextEdit, {'label_text': 'label33', 'result_key': '1', 'result_type': str}),
+                        (MachineGetter, {'result_key': '2'})]
             }
 
-            ObtainWindowController(variants)
+            def print_callback(**kwargs):
+                print(kwargs)
+
+            ObtainWindowController(variants, print_callback)
 
         except Exception as e:
             print(str(e))

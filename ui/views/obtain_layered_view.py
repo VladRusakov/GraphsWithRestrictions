@@ -1,6 +1,6 @@
 from typing import List
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow, QLayout, QWidget, QMessageBox
 
 from ui.utils.window_metaclasses import WrapperAndAbcMeta
 
@@ -34,9 +34,10 @@ class ObtainWindowView(QMainWindow, metaclass=WrapperAndAbcMeta):
         self.verticalLayoutMain.addWidget(self.obtainButton)
 
         self.variants_widget = QtWidgets.QWidget(self.centralWidget())
-        self.change_view(self.variants[0])  # TODO unsafe
+        self.change_view(self.variants[0])  # TODO unsafe when variants fool
 
         self.variants_combo_box.currentTextChanged.connect(self.change_view)
+        self.obtainButton.clicked.connect(self.controller.gather_data_from_getters)
 
     def change_view(self, variant: str):
         # изменить содержимое Layer'а в ObtainView
