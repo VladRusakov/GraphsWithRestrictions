@@ -1,6 +1,9 @@
-from typing import Dict, Iterable
+from typing import Dict, Iterable, List
 from math import inf
 from graph_models.native.graph import Graph, OUT_ARCS
+
+def pascal_for_layered(sources: List[int]) -> Dict[int, int]:
+    pass
 
 
 def calculate_pascal(graph: Graph, sources: Iterable[int], max_path_len: int = inf) -> Dict[int, int]:
