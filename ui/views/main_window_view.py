@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
+from ui.models.main_window_model import MainWindowModel
 from ui.utils.observer import Observer
 from ui.views.main_window import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
@@ -9,7 +10,7 @@ from ui.utils.window_metaclasses import WrapperAndAbcMeta
 
 class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
 
-    def __init__(self, controller, model, parent=None):
+    def __init__(self, controller, model: MainWindowModel, parent=None):
         super(QMainWindow, self).__init__(parent)
         self.controller = controller
         self.model = model
@@ -33,12 +34,30 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
 
     def model_is_changed(self) -> None:
 
+        def get_labels(graph: nx.MultiDiGraph):
+            labels = {}
+            for data in graph.edges.data():
+                labels[data[0], data[1]] = str(list(data[2].values()))
+            return labels
+
         if self.model.graph:
             plt.figure('Graph', clear=True)  # также работает доступ через plt.figure(1)
-            nx.draw(nx.MultiDiGraph(self.model.graph))
+            graph = self.model.graph
+            pos = nx.spring_layout(graph)
+            nx.draw(self.model.graph, pos=pos, with_labels=True, node_color='r')
+            labels = get_labels(graph)
+            nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels)
             plt.draw()
 
         if self.model.layered_graph:
             plt.figure('Layered graph', clear=True)  # аналог - plt.figure(2).clear()
-            nx.draw(self.model.layered_graph)
+            offset = 0.3
+            pos = []
+            graph = self.model.layered_graph
+            for y in range(graph.layers):
+                for x in range(len(graph.origin_nodes)):
+                    pos.append((x*offset, y*offset))
+            nx.draw(graph, pos=pos, with_labels=True)
+            labels = get_labels(graph)
+            nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels, label_pos=0.9)
             plt.draw()

@@ -1,12 +1,17 @@
+from collections import Callable
+
+from networkx import MultiDiGraph
+
+from graph_models.networkx_based.layered_graph import LayeredGraph
 from ui.utils.model import Observable, update_observers
 
 
 class MainWindowModel(Observable):
     def __init__(self):
         super().__init__()
-        self.graph = None
-        self.layered_graph = None
-        self.get_layered_method = None
+        self.graph: MultiDiGraph = None
+        self.layered_graph: LayeredGraph = None
+        self.get_layered_method: Callable = None
 
     @property
     def graph(self):
@@ -14,11 +19,11 @@ class MainWindowModel(Observable):
 
     @graph.setter
     @update_observers
-    def graph(self, graph):
+    def graph(self, graph) -> MultiDiGraph:
         self._graph = graph
 
     @property
-    def layered_graph(self):
+    def layered_graph(self) -> LayeredGraph:
         return self._layered_graph
 
     @layered_graph.setter

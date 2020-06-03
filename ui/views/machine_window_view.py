@@ -139,7 +139,7 @@ class MachineWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         self.tableWidget.cellChanged.connect(self.controller.cell_changed)
 
     def model_is_changed(self):
-        #if True:
+        # if True:
         try:
             machine = self.model.machine
             self.statesInput.setText(str.join(',', machine.states))
