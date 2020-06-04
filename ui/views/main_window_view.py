@@ -6,6 +6,7 @@ from ui.utils.observer import Observer
 from ui.views.main_window import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
 from ui.utils.window_metaclasses import WrapperAndAbcMeta
+from networkx.drawing.nx_agraph import to_agraph
 
 
 class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
@@ -44,7 +45,8 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
             plt.figure('Graph', clear=True)  # также работает доступ через plt.figure(1)
             graph = self.model.graph
             pos = nx.spring_layout(graph)
-            nx.draw(self.model.graph, pos=pos, with_labels=True, node_color='r')
+            graph.graph['edge'] = {'splines': 'curved'}
+            nx.draw(self.model.graph, pos=pos, with_labels=True, node_color='r', connectionstyle='arc3,rad=0.2')
             labels = get_labels(graph)
             nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels)
             plt.draw()
@@ -57,7 +59,7 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
             for y in range(graph.layers):
                 for x in range(len(graph.origin_nodes)):
                     pos.append((x*offset, y*offset))
-            nx.draw(graph, pos=pos, with_labels=True)
+            nx.draw(graph, pos=pos, with_labels=True, connectionstyle='arc3,rad=0.2')
             labels = get_labels(graph)
-            nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels, label_pos=0.9)
+            nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels, label_pos=0.8)
             plt.draw()
