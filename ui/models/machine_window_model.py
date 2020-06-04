@@ -60,18 +60,22 @@ class MachineWindowModel(Observable):
             file.write(str(self.machine).encode())
 
     @update_observers
-    def read_machine(self, path: str) -> Dict[str, Any]:
-        with open(path, 'rb') as file:
-            from ast import literal_eval
-            lines = [line.decode().strip() for line in file]
-            attrs = {}
-            index = 0
-            while not lines[index].startswith('rules'):
-                index += 1
-            lines[index] = str.join('', lines[index:])
-            lines = lines[:index+1]
-            for line in lines:
-                field, data = line.split(':', maxsplit=1)
-                attrs[field.strip()] = literal_eval(data.strip())
+    def read_machine(self, path: str) -> None:
+        self.machine = read_machine_from_file(path)
 
-            self.machine = StateMachine(**attrs)
+
+def read_machine_from_file(path: str) -> StateMachine:
+    with open(path, 'rb') as file:
+        from ast import literal_eval
+        lines = [line.decode().strip() for line in file]
+        attrs = {}
+        index = 0
+        while not lines[index].startswith('rules'):
+            index += 1
+        lines[index] = str.join('', lines[index:])
+        lines = lines[:index + 1]
+        for line in lines:
+            field, data = line.split(':', maxsplit=1)
+            attrs[field.strip()] = literal_eval(data.strip())
+
+        return StateMachine(**attrs)

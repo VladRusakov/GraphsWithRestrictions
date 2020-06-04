@@ -1,5 +1,5 @@
 from networkx import MultiDiGraph
-from ...graph_models.networkx_based.layered_graph import LayeredGraph
+from graph_models.networkx_based.layered_graph import LayeredGraph
 
 arc_type = 'arc_type'
 magnetic = 'm'
@@ -26,8 +26,8 @@ def non_decreasing_magnetism(graph: MultiDiGraph, k: int) -> LayeredGraph:
         elif edge_type == non_magnetic:
             for level in range(k):
                 source = u + level * offset
-                dest = v + (level+1) * offset
+                dest = v + level * offset
                 layered_graph.add_edge(source, dest, origin_edge=key)
-            if has_magnetic_outs[u]:
+            if not has_magnetic_outs[u]:
                 layered_graph.add_edge(u + k * offset, v + k * offset, origin_edge=key)
     return layered_graph

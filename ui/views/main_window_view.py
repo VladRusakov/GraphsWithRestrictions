@@ -59,6 +59,6 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
                 for x in range(len(graph.origin_nodes)):
                     pos.append((x*offset, y*offset))
             nx.draw(graph, pos=pos, with_labels=True, connectionstyle='arc3,rad=0.2')
-            labels = get_labels(graph)
-            nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels, label_pos=0.8)
+            #labels = get_labels(graph)
+            #nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels, label_pos=0.8)
             plt.draw()

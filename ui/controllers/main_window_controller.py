@@ -1,11 +1,28 @@
 from PyQt5.QtWidgets import QMessageBox
 
+from graph_generators.functions_restrictions.non_decreasing_magnetism import non_decreasing_magnetism
+from graph_generators.functions_restrictions.barrier_restricted import barrier_restricted
+from graph_generators.layered_from_machine import generate_layered_graph
 from ui.controllers.machine_window_controller import MachineWindowController
 from ui.controllers.obtain_layered_window_controller import ObtainWindowController
 from ui.models.machine_window_model import MachineWindowModel
 from ui.views.main_window_view import MainWindowView
 from graph_models.utils import read_graph, save_graph, read_layered_graph, save_layered_graph
 from ui.utils.readwrite_dialogs import open_file_dialog, save_file_dialog
+
+from ui.views.get_data_widgets import LabelAndTextEdit, MachineGetter
+obtain_variants = {
+    'Неубывающая магнитность': [
+        (LabelAndTextEdit, {'label_text': 'Уровень магнитности k', 'result_key': 'k', 'result_type': int})],
+    'Барьерная достижимость': [
+        (LabelAndTextEdit, {'label_text': 'Барьерный уровень k', 'result_key': 'k', 'result_type': int})],
+    'Автоматное описание достижимости': [(MachineGetter, {'result_key': 'machine'})]
+}
+obtain_functions = {
+    'Неубывающая магнитность': non_decreasing_magnetism,
+    'Барьерная достижимость': barrier_restricted,
+    'Автоматное описание достижимости': generate_layered_graph
+}
 
 
 class MainWindowController:
@@ -16,32 +33,18 @@ class MainWindowController:
 
     def obtain_graph(self) -> bool:
         graph = self.model.graph
-        # if not graph:
-        #     QMessageBox.about(self.view, "Ошибка", "Граф не загружен")
-        #     return
+        if not graph:
+            QMessageBox.about(self.view, "Ошибка", "Граф не загружен")
+            return
 
         try:
-            from ui.views.get_data_widgets import LabelAndTextEdit, MachineGetter
-            variants = {
-                'One': [(LabelAndTextEdit, {'label_text': 'label1', 'result_key': '1', 'result_type': str}),
-                        (LabelAndTextEdit, {'label_text': 'label2', 'result_key': '2', 'result_type': str})],
-                'Two': [(LabelAndTextEdit, {'label_text': 'label33', 'result_key': '1', 'result_type': str}),
-                        (MachineGetter, {'result_key': '2'})]
-            }
+            def obtain_layered_graph(variant, **kwargs):
+                self.model.layered_graph = obtain_functions[variant](graph=graph, **kwargs)
 
-            def print_callback(**kwargs):
-                print(kwargs)
-
-            ObtainWindowController(variants, print_callback)
+            ObtainWindowController(obtain_variants, obtain_layered_graph)
 
         except Exception as e:
             print(str(e))
-
-        # obtain_params = self.obtain_window()
-        # if not obtain_params:
-        #     return
-        # method = obtain_params['method']
-        # self.model.layered_graph = method(obtain_params['args'])
 
     def open_graph(self):
         try:
