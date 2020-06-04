@@ -1,5 +1,4 @@
 from queue import Queue
-
 from networkx import MultiDiGraph
 
 from graph_models.networkx_based.layered_graph import LayeredGraph

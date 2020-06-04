@@ -6,7 +6,6 @@ from ui.utils.observer import Observer
 from ui.views.main_window import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
 from ui.utils.window_metaclasses import WrapperAndAbcMeta
-from networkx.drawing.nx_agraph import to_agraph
 
 
 class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):

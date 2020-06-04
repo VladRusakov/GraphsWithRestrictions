@@ -1,5 +1,5 @@
 from networkx import MultiDiGraph
-from ..graph_models.networkx_based.layered_graph import LayeredGraph
+from ...graph_models.networkx_based.layered_graph import LayeredGraph
 
 
 def barrier_restricted(graph: MultiDiGraph, k: int) -> LayeredGraph:

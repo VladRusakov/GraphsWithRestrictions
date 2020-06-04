@@ -2,7 +2,6 @@ from typing import Dict, Iterable, List
 from math import inf
 from networkx import MultiDiGraph
 
-from graph_models.native.graph import Graph, OUT_ARCS
 from graph_models.networkx_based.layered_graph import LayeredGraph
 
 
@@ -34,7 +33,7 @@ def pascal_iteration(graph: MultiDiGraph, to_update: Dict[int, int], paths_count
         paths_count[node] += addition
 
     for node in to_update:
-        for arc in graph[node][OUT_ARCS]:
+        for arc in graph.out_edges(node):
             new_to_update[arc.dest] = new_to_update.get(arc.dest, 0) + paths_count[node]
 
     return new_to_update

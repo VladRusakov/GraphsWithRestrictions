@@ -27,6 +27,6 @@ def generate_table_barrier_simple(barrier_height: int) -> CayleyTable:
     for index in range(1, barrier_height):
         rules[increase + str(index)].update({increase+str(1): increase + str(index+1),
                                              barrier: forbidden})
-    rules[increase+str(barrier_height)].update({increase+str(1): increase+barrier_height,
+    rules[increase+str(barrier_height)].update({increase+str(1): increase+str(barrier_height),
                                                 barrier: neutral})
-    return CayleyTable(elements, rules, forbidden)
+    return CayleyTable(list(elements), rules, forbidden)

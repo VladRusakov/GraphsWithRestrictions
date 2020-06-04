@@ -1,6 +1,5 @@
 from math import inf
 from heapq import heappush as insert, heappop as extract_minimum, nsmallest
-
 from networkx import MultiDiGraph
 
 from graph_models.networkx_based.layered_graph import LayeredGraph
