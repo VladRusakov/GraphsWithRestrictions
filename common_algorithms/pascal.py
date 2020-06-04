@@ -15,7 +15,7 @@ def pascal_for_layered(sources: List[int], graph: LayeredGraph, max_path_len: in
     return paths_on_origin
 
 
-def calculate_pascal(graph: Graph, sources: Iterable[int], max_path_len: int = inf) -> Dict[int, int]:
+def calculate_pascal(sources: Iterable[int], graph: MultiDiGraph,  max_path_len: int = inf) -> Dict[int, int]:
     paths_count = {node: 0 for node in graph}
     to_update = {node_idx: 1 for node_idx in sources}
     path_len = 0
@@ -27,7 +27,7 @@ def calculate_pascal(graph: Graph, sources: Iterable[int], max_path_len: int = i
     return paths_count
 
 
-def pascal_iteration(graph: Graph, to_update: Dict[int, int], paths_count: Dict[int, int]) -> Dict[int, int]:
+def pascal_iteration(graph: MultiDiGraph, to_update: Dict[int, int], paths_count: Dict[int, int]) -> Dict[int, int]:
     new_to_update = {}
 
     for node, addition in to_update.items():
