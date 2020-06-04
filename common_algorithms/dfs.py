@@ -65,5 +65,5 @@ def depth_first_has_cycle(source: int, graph: MultiDiGraph, layered_graph: Layer
     cycle_nodes = find_cycle_nodes(source, graph)
     for node in cycle_nodes:
         if has_cycle_on_origin(node, layered_graph):
-            return True
-    return False
+            return True, cycle_nodes
+    return False, cycle_nodes

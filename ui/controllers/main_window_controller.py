@@ -1,4 +1,7 @@
+from typing import Dict
+
 from PyQt5.QtWidgets import QMessageBox
+from networkx import MultiDiGraph
 
 from graph_generators.functions_restrictions.non_decreasing_magnetism import non_decreasing_magnetism
 from graph_generators.functions_restrictions.barrier_restricted import barrier_restricted
@@ -30,21 +33,50 @@ obtain_functions = {
 
 perform_variants = {
     'Поиск в ширину':
-        [(LabelAndTextEdit, {'label_text': 'Начальная вершина', 'result_key': 'source', 'result_type': int})],
-    'Поиск в глубину':
-        [(LabelAndTextEdit, {'label_text': 'Начальная вершина', 'result_key': 'source', 'result_type': int})],
+        [(LabelAndTextEdit, {'label_text': 'Начальная вершина (на развёртке)', 'result_key': 'source',
+                             'result_type': int})],
+    'Поиск в глубину (проверка на ацикличность дерева поиска из вершины)':
+        [(LabelAndTextEdit, {'label_text': 'Начальная вершина (на развёртке)', 'result_key': 'source',
+                             'result_type': int})],
     'Алгоритм Дейкстры':
-        [(LabelAndTextEdit, {'label_text': 'Начальная вершина', 'result_key': 'source', 'result_type': int})],
+        [(LabelAndTextEdit, {'label_text': 'Начальная вершина (на развёртке)', 'result_key': 'source',
+                             'result_type': int})],
     'Алгоритм Паскаля':
-        [(LabelAndTextEditListInt, {'label_text': 'Начальные вершины', 'result_key': 'sources'})],
+        [(LabelAndTextEditListInt, {'label_text': 'Начальные вершины (на развёртке)', 'result_key': 'sources'}),
+         (LabelAndTextEdit, {'label_text': 'Глубина обхода (0, если неограниченно)', 'result_key': 'max_path',
+                             'result_type': int})]
 }
 
 
+def breadth_first_result(tree: MultiDiGraph, not_truncated: MultiDiGraph) -> str:
+    return f"Результат поиска в глубину.\n" \
+        f"Усеченное дерево: узлы = {tree.nodes}, дуги = {tree.edges(keys=False)}\n" \
+        f"Исходное дерево: узлы = {not_truncated.nodes}, дуги = {not_truncated.edges(keys=False)}"
+
+
+def depth_first_has_cycle_result(has_cycle: bool, cycle_nodes) -> str:
+    answer = "имеет циклы" if has_cycle else "не имеет циклов"
+    return "Дерево обхода в глубину из заданной вершины " + answer
+
+
+def calculate_dijkstra_result(tree: MultiDiGraph, not_truncated: MultiDiGraph) -> str:
+    return f"Кратчайшие пути на развёртке из заданной вершины:\n" \
+        f"Усеченное дерево: узлы = {tree.nodes}, дуги = {tree.edges(keys=False, data=True)}\n" \
+        f"Исходное дерево: узлы = {not_truncated.nodes}, дуги = {not_truncated.edges(keys=False, data=True)}"
+
+
+def pascal_for_layered_result(paths_on_origin: Dict[int, int], paths_on_layered: Dict[int, int]) -> str:
+    return f"Число путей во все вершины из заданных:\n" \
+        f"На исходном графе: {paths_on_origin}\n" \
+        f"На вспомогательном: {paths_on_layered}"
+
+
 perform_functions = {
-    'Поиск в ширину': breadth_first,
-    'Поиск в глубину': depth_first_has_cycle,
-    'Алгоритм Дейкстры': calculate_dijkstra,
-    'Алгоритм Паскаля': pascal_for_layered
+    'Поиск в ширину': [breadth_first, breadth_first_result],
+    'Поиск в глубину (проверка на ацикличность дерева поиска из вершины)': [depth_first_has_cycle,
+                                                                            depth_first_has_cycle_result],
+    'Алгоритм Дейкстры': [calculate_dijkstra, calculate_dijkstra_result],
+    'Алгоритм Паскаля': [pascal_for_layered, pascal_for_layered_result]
 }
 
 
@@ -53,9 +85,9 @@ class MainWindowController:
         self.model = model
         self.view = MainWindowView(self, self.model)
         self.view.show()
-        graph = read_graph('../data/image2.txt')
+        graph = read_graph('../data/image2.txt')  # TODO remove hardcode
         self.model.graph = graph
-        layered_graph = read_layered_graph('../data/image2_layered.txt')
+        layered_graph = read_layered_graph('../data/image2_layered.txt')  # TODO remove hardcode
         self.model.layered_graph = layered_graph
 
     def obtain_graph(self) -> bool:
@@ -129,11 +161,11 @@ class MainWindowController:
         try:
             def perform_task(variant, **kwargs):
                 kwargs.update({'layered_graph': layered_graph})
-                function = perform_functions[variant]
+                function = perform_functions[variant][0]
                 if 'graph' in function.__code__.co_varnames:
                     kwargs.update({'graph': graph})
                 answer = function(**kwargs)
-                self.view.set_answer_text('ll'+str(answer))
+                self.view.set_answer_text(perform_functions[variant][1](*answer))
 
             ObtainWindowController(perform_variants, perform_task)
 

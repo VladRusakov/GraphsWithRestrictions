@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from math import inf
 from heapq import heappush as insert, heappop as extract_minimum, nsmallest
 from networkx import MultiDiGraph
@@ -11,7 +13,7 @@ ARC = 'arc'
 DEPTH = 'depth'
 
 
-def calculate_dijkstra(source: int, layered_graph: LayeredGraph, ) -> MultiDiGraph:
+def calculate_dijkstra(source: int, layered_graph: LayeredGraph, ) -> Tuple[MultiDiGraph, MultiDiGraph]:
     node_info = {node: {COST: inf, ARC: None, VISITED: False, DEPTH: inf} for node in layered_graph}
     node_info[source][COST] = 0
     node_info[source][DEPTH] = 0
@@ -41,18 +43,20 @@ def calculate_dijkstra(source: int, layered_graph: LayeredGraph, ) -> MultiDiGra
                 node_info[dest][DEPTH] = new_depth
                 insert(to_visit, (new_cost, dest))
                 insert(images[layered_graph.origin_node_index(dest)], ((new_cost, new_depth), dest))
-                if not tree.has_edge(to_open, dest):  # TODO change on link to arc
-                    tree.add_edge(to_open, dest)
+                if tree.has_edge(to_open, dest):  # TODO change on link to arc
+                    tree.remove_edge(to_open, dest)
+                tree.add_edge(to_open, dest, COST=new_cost)
 
     # node_info truncation - усечение дерева
+    not_truncated_tree = MultiDiGraph(tree)
     while leafs:
         leaf = leafs.pop()
         path_cost = node_info[leaf][COST]
         path_depth = node_info[leaf][DEPTH]
         if nsmallest(1, images[layered_graph.origin_node_index(leaf)]) != ((path_cost, path_depth), leaf):
             parent = node_info[leaf][ARC][0]
-            tree.remove_edge(parent, leaf)
+            tree.remove_node(leaf)
             if not tree.out_edges(parent):
                 leafs.add(parent)
 
-    return tree
+    return tree, not_truncated_tree

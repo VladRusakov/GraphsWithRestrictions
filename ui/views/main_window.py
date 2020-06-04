@@ -52,7 +52,8 @@ class Ui_MainWindow(object):
         self.verticalLayoutMain.addWidget(self.pushButtonToLayered, 0, QtCore.Qt.AlignHCenter)
 
         self.answerTextEdit = QtWidgets.QTextEdit()
-        self.answerTextEdit.setMaximumHeight(100)
+        self.answerTextEdit.setMinimumHeight(120)
+        self.answerTextEdit.setMaximumHeight(200)
         self.verticalLayoutMain.addWidget(self.answerTextEdit)
 
         # menus

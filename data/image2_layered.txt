@@ -2,20 +2,20 @@ layers : 2
 origin_nodes : [0, 1, 2, 3] 
 # graph section:
 0 3
-2 {'weight': 0}
-5 {'weight': 0}
-7 {'weight': 0}
+2 {'weight': 2}
+5 {'weight': 1}
+7 {'weight': 10}
 1 2
-3 {'weight': 0}
-4 {'weight': 0}
+3 {'weight': 5}
+4 {'weight': 1}
 2 1
-1 {'weight': 0}
+1 {'weight': 2}
 3 0
 4 2
-5 {'weight': 0}
-7 {'weight': 0}
+5 {'weight': 1}
+7 {'weight': 10}
 5 1
-4 {'weight': 0}
+4 {'weight': 1}
 6 1
-5 {'weight': 0}
+5 {'weight': 2}
 7 0

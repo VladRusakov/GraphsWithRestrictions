@@ -46,7 +46,7 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
             graph = self.model.graph
             pos = nx.spring_layout(graph)
             graph.graph['edge'] = {'splines': 'curved'}
-            nx.draw(self.model.graph, pos=pos, with_labels=True, node_color='r', connectionstyle='arc3,rad=0.2')
+            nx.draw(self.model.graph, pos=pos, with_labels=True, node_color='r', connectionstyle='arc3,rad=0.3')
             labels = get_labels(graph)
             nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels)
             plt.draw()

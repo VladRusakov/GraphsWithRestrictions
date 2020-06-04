@@ -1,4 +1,6 @@
 from queue import Queue
+from typing import Tuple
+
 from networkx import MultiDiGraph
 
 from graph_models.networkx_based.layered_graph import LayeredGraph
@@ -10,7 +12,7 @@ mark = 'mark'
 depth = 'depth'
 
 
-def breadth_first(source: int, layered_graph: LayeredGraph):
+def breadth_first(source: int, layered_graph: LayeredGraph) -> Tuple[MultiDiGraph, MultiDiGraph]:
     node_info = {node: {mark: not_processed, depth: 0} for node in layered_graph.nodes}
     image = {origin_node: [] for origin_node in layered_graph.origin_nodes}
     tree = MultiDiGraph()
@@ -36,6 +38,7 @@ def breadth_first(source: int, layered_graph: LayeredGraph):
             leafs.put(to_open)
         node_info[to_open][mark] = processed
 
+    not_truncated_tree = MultiDiGraph(tree)
     while not leafs.empty():
         leaf = leafs.get()
         images = image[layered_graph.origin_node_index(leaf)]
@@ -45,4 +48,4 @@ def breadth_first(source: int, layered_graph: LayeredGraph):
             if not tree.out_edges(leaf_source):
                 leafs.put(leaf_source)
 
-    return tree
+    return tree, not_truncated_tree

@@ -3,12 +3,12 @@ from math import inf
 from graph_models.native.graph import Graph, OUT_ARCS
 
 
-def calculate_pascal(graph: Graph, sources: Iterable[int], max_path_len: int = inf) -> Dict[int, int]:
+def calculate_pascal(graph: Graph, sources: Iterable[int], max_path: int = inf) -> Dict[int, int]:
     paths_count = {node: 0 for node in graph}
     to_update = {node_idx: 1 for node_idx in sources}
     path_len = 0
 
-    while to_update and path_len <= max_path_len:
+    while to_update and path_len <= max_path:
         to_update = pascal_iteration(graph, to_update, paths_count)
         path_len += 1
 
