@@ -7,7 +7,14 @@ from graph_models.networkx_based.layered_graph import LayeredGraph
 
 encoding = 'utf-8'
 comments = '#'
-graph_section = f'{comments} graph section:\n'
+graph_section = f'{comments} graph section:'
+
+
+def _find_str_index_in_list(string: str, str_list: List[str]) -> int or None:
+    for index in range(len(str_list)):
+        if string in str_list[index]:
+            return index
+    return None
 
 
 def save_graph(graph: MultiDiGraph, path: str, header: str = '') -> None:
@@ -20,7 +27,7 @@ def save_graph(graph: MultiDiGraph, path: str, header: str = '') -> None:
 def read_graph(path: str, graph_type: type = MultiDiGraph):
     with open(path, 'rb') as file:
         lines = [line.decode(encoding) for line in file]
-        delimiter = lines.index(graph_section)
+        delimiter = _find_str_index_in_list(graph_section, lines)
         attrs = parse_attrs(lines[:delimiter])
         attrs.insert(0, None)  # adding empty graph
         return parse_multiline_adjlist(iter(lines[delimiter:]), comments,
@@ -38,7 +45,7 @@ def read_layered_graph(path: str) -> LayeredGraph:
 
 
 def write_to_file(graph: MultiDiGraph, file: BinaryIO) -> None:
-    file.write(graph_section.encode(encoding))
+    file.write(graph_section.encode(encoding) + '\n')
     for multiline in generate_multiline_adjlist(graph):
         file.write((multiline + '\n').encode(encoding))
 
