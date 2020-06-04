@@ -1,5 +1,3 @@
-from typing import List
-
 from networkx import MultiDiGraph
 
 from graph_models.networkx_based.layered_graph import LayeredGraph

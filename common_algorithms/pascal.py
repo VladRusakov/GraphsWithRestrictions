@@ -1,9 +1,18 @@
 from typing import Dict, Iterable, List
 from math import inf
-from graph_models.native.graph import Graph, OUT_ARCS
+from networkx import MultiDiGraph
 
-def pascal_for_layered(sources: List[int]) -> Dict[int, int]:
-    pass
+from graph_models.native.graph import Graph, OUT_ARCS
+from graph_models.networkx_based.layered_graph import LayeredGraph
+
+
+def pascal_for_layered(sources: List[int], graph: LayeredGraph, max_path_len: int = inf) -> Dict[int, int]:
+    paths_on_layred = calculate_pascal(sources, graph, max_path_len)
+    paths_on_origin = {node: 0 for node in graph.origin_nodes}
+    for node, paths in paths_on_layred:
+        if paths > 0:
+            paths_on_origin[graph.origin_node_index(node)] += paths
+    return paths_on_origin
 
 
 def calculate_pascal(graph: Graph, sources: Iterable[int], max_path_len: int = inf) -> Dict[int, int]:
