@@ -27,6 +27,7 @@ class MainWindowView(QMainWindow, Observer, metaclass=WrapperAndAbcMeta):
         self.ui.open_machine.triggered.connect(self.controller.open_machine_window)
         self.ui.save_graph.triggered.connect(self.controller.save_graph)
         self.ui.save_layered_graph.triggered.connect(self.controller.save_layered_graph)
+        self.ui.menu_task.triggered.connect(self.controller.perform_task)
         self.model_is_changed()
 
     def set_answer_text(self, text):

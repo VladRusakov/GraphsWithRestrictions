@@ -5,12 +5,12 @@ from networkx import MultiDiGraph
 from graph_models.networkx_based.layered_graph import LayeredGraph
 
 
-def pascal_for_layered(sources: List[int], graph: LayeredGraph, max_path_len: int = inf) -> Dict[int, int]:
-    paths_on_layred = calculate_pascal(sources, graph, max_path_len)
-    paths_on_origin = {node: 0 for node in graph.origin_nodes}
-    for node, paths in paths_on_layred:
+def pascal_for_layered(sources: List[int], layered_graph: LayeredGraph, max_path_len: int = inf) -> Dict[int, int]:
+    paths_on_layred = calculate_pascal(sources, layered_graph, max_path_len)
+    paths_on_origin = {node: 0 for node in layered_graph.origin_nodes}
+    for node, paths in paths_on_layred.items():
         if paths > 0:
-            paths_on_origin[graph.origin_node_index(node)] += paths
+            paths_on_origin[layered_graph.origin_node_index(node)] += paths
     return paths_on_origin
 
 
@@ -34,6 +34,6 @@ def pascal_iteration(graph: MultiDiGraph, to_update: Dict[int, int], paths_count
 
     for node in to_update:
         for arc in graph.out_edges(node):
-            new_to_update[arc.dest] = new_to_update.get(arc.dest, 0) + paths_count[node]
+            new_to_update[arc[1]] = new_to_update.get(arc[1], 0) + paths_count[node]
 
     return new_to_update

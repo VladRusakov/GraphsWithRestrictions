@@ -29,7 +29,7 @@ class ObtainWindowView(QMainWindow, metaclass=WrapperAndAbcMeta):
         self.variants_combo_box.addItems(self.variants)
         self.verticalLayoutMain.addWidget(self.variants_combo_box)
 
-        self.obtainButton = QtWidgets.QPushButton(text='Создать', parent=central_widget)
+        self.obtainButton = QtWidgets.QPushButton(text='Выполнить', parent=central_widget)
         self.obtainButton.adjustSize()
         self.verticalLayoutMain.addWidget(self.obtainButton)
 

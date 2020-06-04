@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Tuple, Any
+from typing import Tuple, Any, List
 
 from PyQt5.QtWidgets import QLabel, QTextEdit, QWidget, QHBoxLayout, QLayout, QPushButton
 
@@ -28,6 +28,11 @@ class LabelAndTextEdit(DataGetter):
     def get_data(self) -> Tuple[str, Any]:
         # TODO делать проверку валидности полей и бросать исключения
         return self.key, self.result_type(self.text_edit.toPlainText().strip())
+
+
+class LabelAndTextEditListInt(LabelAndTextEdit):
+    def get_data(self) -> Tuple[str, List[int]]:
+        return self.key, [int(val) for val in self.text_edit.toPlainText().strip().split(',')]
 
 
 class MachineGetter(DataGetter):

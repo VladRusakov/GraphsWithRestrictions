@@ -1,3 +1,5 @@
+from typing import Set
+
 from networkx import MultiDiGraph
 
 from graph_models.networkx_based.layered_graph import LayeredGraph
@@ -8,7 +10,7 @@ processed = 'О'
 mark = 'mark'
 
 
-def find_cycle_nodes(source: int, graph: MultiDiGraph) -> set[int]:
+def find_cycle_nodes(source: int, graph: MultiDiGraph) -> Set[int]:
     cycle_nodes = set()
     node_info = {node: not_processed for node in graph.nodes}
     to_process = [source]
@@ -20,12 +22,14 @@ def find_cycle_nodes(source: int, graph: MultiDiGraph) -> set[int]:
             continue
         has_append = False
         for arc in graph.out_edges(node):
-            if node_info[arc.dest] == viewed:
-                cycle_nodes.add(arc.dest)
-            elif node_info[arc.dest] == not_processed:
-                to_process.append(arc.dest)
+            dest = arc[1]
+            if node_info[dest] == viewed:
+                cycle_nodes.add(dest)
+            elif node_info[dest] == not_processed:
+                to_process.append(dest)
                 has_append = True
         if has_append:
+            node_info[node] = viewed
             continue
         to_process.pop()
         node_info[node] = processed
@@ -42,20 +46,23 @@ def has_cycle_on_origin(source: int, graph: LayeredGraph) -> bool:
             continue
         has_append = False
         for arc in graph.out_edges(node):
-            if node_info[graph.origin_node_index(arc.dest)] == viewed:
+            dest = arc[1]
+            dest_origin = graph.origin_node_index(dest)
+            if node_info[dest_origin] == viewed:
                 return True
-            elif node_info[graph.origin_node_index(arc.dest)] == not_processed:
-                to_process.append(arc.dest)
+            elif node_info[dest_origin] == not_processed:
+                to_process.append(dest)
                 has_append = True
         if has_append:
+            node_info[dest_origin] = viewed
             continue
         to_process.pop()
         node_info[graph.origin_node_index(node)] = processed
     return False
 
 
-def depth_first_has_cycle(source: int, origin_graph: MultiDiGraph, layered_graph: LayeredGraph) -> bool:
-    cycle_nodes = find_cycle_nodes(source, origin_graph)
+def depth_first_has_cycle(source: int, graph: MultiDiGraph, layered_graph: LayeredGraph) -> bool:
+    cycle_nodes = find_cycle_nodes(source, graph)
     for node in cycle_nodes:
         if has_cycle_on_origin(node, layered_graph):
             return True
