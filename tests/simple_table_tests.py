@@ -3,6 +3,7 @@ import networkx as nx
 from table_generators.mixed_simple import generate_table_mixed_simple
 from graph_generators.layered_from_table import generate_layered_graph
 
+
 class TestCayleyTables(unittest.TestCase):
 
     def test_mixed_simple_create(self):

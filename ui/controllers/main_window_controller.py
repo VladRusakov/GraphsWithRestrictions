@@ -85,10 +85,10 @@ class MainWindowController:
         self.model = model
         self.view = MainWindowView(self, self.model)
         self.view.show()
-        graph = read_graph('../data/image2.txt')  # TODO remove hardcode
-        self.model.graph = graph
-        layered_graph = read_layered_graph('../data/image2_layered.txt')  # TODO remove hardcode
-        self.model.layered_graph = layered_graph
+        #graph = read_graph('../data/image2.txt')  # TODO remove hardcode
+        #self.model.graph = graph
+        #layered_graph = read_layered_graph('../data/image2_layered.txt')  # TODO remove hardcode
+        #self.model.layered_graph = layered_graph
 
     def obtain_graph(self) -> bool:
         graph = self.model.graph
