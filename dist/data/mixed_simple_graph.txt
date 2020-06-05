@@ -1,0 +1,9 @@
+# graph section:
+0 2
+1 {'arc_type': 'a', 'weight': 5}
+3 {'arc_type': 'b', 'weight': 4}
+1 1
+2 {'arc_type': 'a', 'weight': 6}
+3 1
+2 {'arc_type': 'b', 'weight': 8}
+2 0
