@@ -4,9 +4,8 @@ from networkx import Graph, MultiDiGraph
 
 class LayeredGraph(MultiDiGraph):
     def __init__(self, graph: Graph = None, layers: int = 1, origin_nodes: List[int] = []):
-        if graph is LayeredGraph:
+        if isinstance(graph, LayeredGraph):
             super().__init__(graph)
-            graph = LayeredGraph(graph)
             self._layers = graph.layers
             self._origin_nodes = graph.origin_nodes.copy()
             self._max_node = graph.max_node
