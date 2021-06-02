@@ -45,7 +45,7 @@ def read_layered_graph(path: str) -> LayeredGraph:
 
 
 def write_to_file(graph: MultiDiGraph, file: BinaryIO) -> None:
-    file.write(graph_section.encode(encoding) + '\n')
+    file.write(graph_section.encode(encoding) + '\n'.encode(encoding))
     for multiline in generate_multiline_adjlist(graph):
         file.write((multiline + '\n').encode(encoding))
 
