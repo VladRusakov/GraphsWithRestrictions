@@ -3,7 +3,7 @@ from networkx import Graph, MultiDiGraph
 
 
 class LayeredGraph(MultiDiGraph):
-    def __init__(self, graph: Graph = None, layers: int = 1, origin_nodes: List[int] = []):
+    def __init__(self, graph: Graph = None, layers: int = 1, origin_nodes: List[int] = None):
         if isinstance(graph, LayeredGraph):
             super().__init__(graph)
             self._layers = graph.layers
@@ -51,7 +51,7 @@ class LayeredGraph(MultiDiGraph):
         for origin_node_index in self.origin_nodes:
             yield origin_node_index + layer_offset
 
-    def get_connected_nodes(self, node_index: int) -> List[int]:
+    def get_connected_nodes(self, node_index: int) -> Iterable[int]:
         if node_index not in self.nodes:
             raise ValueError('Node index should be integer and belong to graph')
         origin_node = node_index % self.max_node
