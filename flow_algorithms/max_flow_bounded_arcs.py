@@ -14,7 +14,13 @@ def calculate_multiplicity(start_path_arc, network: MultiDiGraph, sink, bounded_
 
 
 def calculate_simple_capacity(start_path_arc, network: MultiDiGraph, sink, bounded_arcs: set) -> float:
-    return 0
+    capacity = 0 if start_path_arc not in bounded_arcs else start_path_arc.capacity
+    current_arc = start_path_arc
+    while current_arc[1] is not sink:
+        arc_end = current_arc[1]
+        current_arc = (arc_end, list(network.successors(arc_end))[0])
+        capacity = capacity if capacity < arc_capacity else arc_capacity
+    return capacity
 
 
 def max_flow_in_parallel_network(network: MultiDiGraph, source, sink, bounded_arcs: Set[Tuple], shared_capacity: float) -> float:
