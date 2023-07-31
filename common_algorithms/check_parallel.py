@@ -1,7 +1,8 @@
 from networkx import MultiDiGraph
 from queue import Queue
 
-def check_source_and_sink(network, source, sink) -> None:
+
+def check_source_and_sink(network: MultiDiGraph, source, sink) -> None:
     if source not in network:
         raise ValueError('source node does not belong to the network')
     if sink not in network:

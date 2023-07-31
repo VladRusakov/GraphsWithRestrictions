@@ -37,10 +37,16 @@ def get_paths_order(paths_multiplicities: dict, paths_simple_capacities: dict) -
     return [path["path_start"] for path in paths_order]
 
 
-def max_flow_in_parallel_network(network: MultiDiGraph, source, sink, bounded_arcs: Set[Tuple], shared_capacity: float) -> float:
+def max_flow_in_parallel_network(network: MultiDiGraph,
+                                 source,
+                                 sink,
+                                 bounded_arcs: Set[Tuple],
+                                 shared_capacity: float) -> float:
     paths_starts: List[Tuple] = list(network.out_edges(source))
     paths_multiplicities = {path: calculate_multiplicity(path, network, sink, bounded_arcs) for path in paths_starts}
-    paths_simple_capacities = {path: calculate_simple_capacity(path, network, sink, bounded_arcs) for path in paths_starts}
+    paths_simple_capacities = {
+        path: calculate_simple_capacity(path, network, sink, bounded_arcs) for path in paths_starts
+    }
     residual_shared_capacity = shared_capacity
     paths_capacities = {path: 0 for path in paths_starts}
     paths_ordering = get_paths_order(paths_multiplicities, paths_simple_capacities)
@@ -70,8 +76,11 @@ def calculate_multiplicity_reversed(end_path_arc, network: MultiDiGraph, source,
     return multiplicity
 
 
-def assign_path_capacity(network: MultiDiGraph, end_path_arc, source, bounded_arcs, residual_shared_capacity: float) \
-        -> Tuple[float, float]:
+def assign_path_capacity(network: MultiDiGraph,
+                         end_path_arc,
+                         source,
+                         bounded_arcs,
+                         residual_shared_capacity: float) -> Tuple[float, float]:
     simple_capacity = float("inf")
     path_simple_arcs = set()
     path_bounded_arcs = set()
@@ -124,12 +133,13 @@ def max_flow_in_tree_structured_network(network, source, sink, bounded_arcs, sha
     paths_capacities = {path_end: 0 for path_end in paths_ends}
     paths_ordering = get_paths_order(paths_multiplicities, {path_end: 0 for path_end in paths_ends})
     for path_end in paths_ordering:
-        paths_capacities[path_end], residual_shared_capacity = assign_path_capacity(network=network,
-                                                                                    end_path_arc=path_end,
-                                                                                    source=source,
-                                                                                    bounded_arcs=bounded_arcs,
-                                                                                    residual_shared_capacity=residual_shared_capacity
-                                                                                    )
+        paths_capacities[path_end], residual_shared_capacity = assign_path_capacity(
+            network=network,
+            end_path_arc=path_end,
+            source=source,
+            bounded_arcs=bounded_arcs,
+            residual_shared_capacity=residual_shared_capacity
+        )
 
     return sum(paths_capacities.values())
 
