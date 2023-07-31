@@ -70,8 +70,44 @@ def calculate_multiplicity_reversed(end_path_arc, network: MultiDiGraph, source,
     return multiplicity
 
 
-def get_path_capacity(network, path_end, source, bounded_arcs, residual_shared_capacity: float) -> float:
-    return 0
+def assign_path_capacity(network: MultiDiGraph, end_path_arc, source, bounded_arcs, residual_shared_capacity: float) \
+        -> Tuple[float, float]:
+    simple_capacity = float("inf")
+    path_simple_arcs = set()
+    path_bounded_arcs = set()
+    if end_path_arc in bounded_arcs:
+        path_bounded_arcs.add(end_path_arc)
+    else:
+        path_simple_arcs.add(end_path_arc)
+        simple_capacity = network.get_edge_data(*end_path_arc)[0]["residual_capacity"]
+
+    current_arc = end_path_arc
+    while current_arc[0] is not source:
+        arc_start = current_arc[0]
+        current_arc = (list(network.predecessors(arc_start))[0], arc_start)
+        if current_arc in bounded_arcs:
+            path_bounded_arcs.add(current_arc)
+            continue
+        arc_capacity = network.get_edge_data(*current_arc)[0]["residual_capacity"]
+        if arc_capacity == 0:
+            return 0, residual_shared_capacity
+        path_simple_arcs.add(current_arc)
+        simple_capacity = simple_capacity if simple_capacity < arc_capacity else arc_capacity
+
+    path_multiplicity = len(path_bounded_arcs)
+    if not path_bounded_arcs:
+        path_capacity = simple_capacity
+    elif residual_shared_capacity / len(path_bounded_arcs) >= simple_capacity:
+        path_capacity = simple_capacity
+        residual_shared_capacity -= path_capacity * path_multiplicity
+    else:
+        path_capacity = residual_shared_capacity / len(path_bounded_arcs)
+        residual_shared_capacity = 0
+
+    for arc in path_simple_arcs:
+        network.get_edge_data(*arc)[0]["residual_capacity"] -= path_capacity
+
+    return path_capacity, residual_shared_capacity
 
 
 def max_flow_in_tree_structured_network(network, source, sink, bounded_arcs, shared_capacity: float) -> float:
@@ -88,12 +124,12 @@ def max_flow_in_tree_structured_network(network, source, sink, bounded_arcs, sha
     paths_capacities = {path_end: 0 for path_end in paths_ends}
     paths_ordering = get_paths_order(paths_multiplicities, {path_end: 0 for path_end in paths_ends})
     for path_end in paths_ordering:
-        paths_capacities[path_end] = get_path_capacity(network=network,
-                                                       path_end=path_end,
-                                                       source=source,
-                                                       bounded_arcs=bounded_arcs,
-                                                       residual_shared_capacity=residual_shared_capacity,
-                                                       )
+        paths_capacities[path_end], residual_shared_capacity = assign_path_capacity(network=network,
+                                                                                    end_path_arc=path_end,
+                                                                                    source=source,
+                                                                                    bounded_arcs=bounded_arcs,
+                                                                                    residual_shared_capacity=residual_shared_capacity
+                                                                                    )
 
     return sum(paths_capacities.values())
 
@@ -107,16 +143,15 @@ if __name__ == '__main__':
         (1, 12, dict(capacity=1)), (12, 4, dict(capacity=1)),
         (1, 4),
     ])
-    # print(max_flow_in_parallel_network(network=parallel_network,
-    #                                    source=1,
-    #                                    sink=4,
-    #                                    bounded_arcs={(1, 2), (5, 6), (8, 9), (9, 10), (11, 4), (1, 4)},
-    #                                    shared_capacity=20)
-    #       )
-
-    print(max_flow_in_tree_structured_network(network=parallel_network,
+    print(max_flow_in_parallel_network(network=parallel_network,
                                        source=1,
                                        sink=4,
                                        bounded_arcs={(1, 2), (5, 6), (8, 9), (9, 10), (11, 4), (1, 4)},
                                        shared_capacity=20)
           )
+
+    print(max_flow_in_tree_structured_network(network=parallel_network,
+                                              source=1,
+                                              sink=4,
+                                              bounded_arcs={(1, 2), (5, 6), (8, 9), (9, 10), (11, 4), (1, 4)},
+                                              shared_capacity=20))
